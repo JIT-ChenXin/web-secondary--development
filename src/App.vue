@@ -21,20 +21,23 @@
               d="M7.875 16.375H12.875V19.5H7.875V16.375ZM7.875 20.125H12.875V23.25H7.875V20.125ZM13.5 16.375H18.5V19.5H13.5V16.375ZM13.5 20.125H18.5V23.25H13.5V20.125ZM19.125 16.375H24.125V19.5H19.125V16.375ZM19.125 20.125H24.125V23.25H19.125V20.125Z"
               fill="white" />
           </svg>
-          <span>&nbsp; —— &nbsp; </span>
+          <<<<<<< HEAD <span>&nbsp; — &nbsp; </span>
+            =======
+            <span>&nbsp; —— &nbsp; </span>
+            >>>>>>> 38bac2f5bcf65ac0479d9135550cd3fc46376ccf
 
-          <el-date-picker prefix-icon="1" v-model="timeEnd" @change="timeEndFn" type="month"
-            :picker-options="pickerOptionsMonth2" placeholder="选择日期">
-          </el-date-picker>
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-            <path d="M0 0H30C31.1046 0 32 0.895431 32 2V30C32 31.1046 31.1046 32 30 32H0V0Z" fill="#0084FF" />
-            <path
-              d="M24.75 8.875H22.2695C22.2695 7.83984 21.4297 7 20.3945 7H20.082C19.0469 7 18.207 7.83984 18.207 8.875H13.8125C13.8125 8.35742 13.6035 7.88867 13.2637 7.54883C12.9238 7.20898 12.4551 7 11.9375 7H11.625C10.5898 7 9.75 7.83984 9.75 8.875H7.25C6.56055 8.875 6 9.43359 6 10.125V24.5C6 25.1895 6.56055 25.75 7.25 25.75H24.75C25.4395 25.75 26 25.1895 26 24.5V10.125C26 9.43359 25.4395 8.875 24.75 8.875ZM19.457 9.03125C19.457 8.59961 19.8066 8.25 20.2383 8.25C20.6699 8.25 21.0195 8.59961 21.0195 9.03125V10.5938C21.0195 11.0254 20.6699 11.375 20.2383 11.375C20.0234 11.375 19.8281 11.2871 19.6855 11.1465C19.5449 11.0039 19.457 10.8086 19.457 10.5938V9.03125ZM11 9.03125C11 8.59961 11.3496 8.25 11.7812 8.25C12.2129 8.25 12.5625 8.59961 12.5625 9.03125V10.5938C12.5625 11.0254 12.2129 11.375 11.7812 11.375C11.5664 11.375 11.3711 11.2871 11.2285 11.1465C11.0879 11.0039 11 10.8086 11 10.5938V9.03125ZM24.75 23.875C24.75 24.2207 24.4707 24.5 24.125 24.5H7.875C7.5293 24.5 7.25 24.2207 7.25 23.875V15.125H24.75V23.875Z"
-              fill="white" />
-            <path
-              d="M7.875 16.375H12.875V19.5H7.875V16.375ZM7.875 20.125H12.875V23.25H7.875V20.125ZM13.5 16.375H18.5V19.5H13.5V16.375ZM13.5 20.125H18.5V23.25H13.5V20.125ZM19.125 16.375H24.125V19.5H19.125V16.375ZM19.125 20.125H24.125V23.25H19.125V20.125Z"
-              fill="white" />
-          </svg>
+            <el-date-picker prefix-icon="1" v-model="timeEnd" @change="timeEndFn" type="month"
+              :picker-options="pickerOptionsMonth2" placeholder="选择日期">
+            </el-date-picker>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M0 0H30C31.1046 0 32 0.895431 32 2V30C32 31.1046 31.1046 32 30 32H0V0Z" fill="#0084FF" />
+              <path
+                d="M24.75 8.875H22.2695C22.2695 7.83984 21.4297 7 20.3945 7H20.082C19.0469 7 18.207 7.83984 18.207 8.875H13.8125C13.8125 8.35742 13.6035 7.88867 13.2637 7.54883C12.9238 7.20898 12.4551 7 11.9375 7H11.625C10.5898 7 9.75 7.83984 9.75 8.875H7.25C6.56055 8.875 6 9.43359 6 10.125V24.5C6 25.1895 6.56055 25.75 7.25 25.75H24.75C25.4395 25.75 26 25.1895 26 24.5V10.125C26 9.43359 25.4395 8.875 24.75 8.875ZM19.457 9.03125C19.457 8.59961 19.8066 8.25 20.2383 8.25C20.6699 8.25 21.0195 8.59961 21.0195 9.03125V10.5938C21.0195 11.0254 20.6699 11.375 20.2383 11.375C20.0234 11.375 19.8281 11.2871 19.6855 11.1465C19.5449 11.0039 19.457 10.8086 19.457 10.5938V9.03125ZM11 9.03125C11 8.59961 11.3496 8.25 11.7812 8.25C12.2129 8.25 12.5625 8.59961 12.5625 9.03125V10.5938C12.5625 11.0254 12.2129 11.375 11.7812 11.375C11.5664 11.375 11.3711 11.2871 11.2285 11.1465C11.0879 11.0039 11 10.8086 11 10.5938V9.03125ZM24.75 23.875C24.75 24.2207 24.4707 24.5 24.125 24.5H7.875C7.5293 24.5 7.25 24.2207 7.25 23.875V15.125H24.75V23.875Z"
+                fill="white" />
+              <path
+                d="M7.875 16.375H12.875V19.5H7.875V16.375ZM7.875 20.125H12.875V23.25H7.875V20.125ZM13.5 16.375H18.5V19.5H13.5V16.375ZM13.5 20.125H18.5V23.25H13.5V20.125ZM19.125 16.375H24.125V19.5H19.125V16.375ZM19.125 20.125H24.125V23.25H19.125V20.125Z"
+                fill="white" />
+            </svg>
         </div>
       </div>
       <div class="r_left">
@@ -64,26 +67,32 @@
 
     <div class="tableBody">
       <div class="tableTitle">
-        <div class="P_Company" :style="{width:'180px'}">用电单位</div>
+        <div class="P_Company" :style="{width:'254px'}">用电单位</div>
         <div class="P_CompanyName">{{ricityUser}}</div>
 
       </div>
-      <div class="tableTitle" style="borderTop:none;borderBottom:none">
-        <div class="P_Company" :style="{width:'180px'}">电站名称</div>
+      <div class="tableTitle" style="borderTop:none;borderBottom:none;backgroundColor: #F8FCFF;">
+        <div class="P_Company" :style="{width:'254px'}">电站名称</div>
         <div class="P_CompanyName">{{stationName}}</div>
 
       </div>
-      <el-table :data="tableData" stripe style="width: 100%" show-summary border>
-        <el-table-column prop="date" label="月份" width="180" align='center' :render-header="renderheader">
-        </el-table-column>
-        <el-table-column prop="feesSelfuse" label="发电量|(kWh)" width="180" sortable align='center'
+      <el-table :data="tableData" stripe style="width: 100%" show-summary border :row-style="{ height: '40px' }"
+        :header-cell-style="{padding:0+'px'}" :cell-style="{padding:0+'px', color: '#000000'}"
+        :header-row-style="{height: '50px'}">
+        <el-table-column prop="date" :label="stateR=='month'?'月份':'年份'" width="254" align='center'
           :render-header="renderheader">
         </el-table-column>
-        <el-table-column prop="powerOngrid" label="上网电量|(kWh)" sortable align='center' :render-header="renderheader">
+        <el-table-column prop="feesSelfuse" :label="stateR=='month'?'发电量|(kWh)':'发电量|(万kWh)'" sortable align='center'
+          :render-header="renderheader">
         </el-table-column>
-        <el-table-column prop="powerOutput" label="自发自用电量|(kWh)" sortable align='center' :render-header="renderheader">
+        <el-table-column prop="powerOngrid" :label=" stateR=='month'?'上网电量|(kWh)':'上网电量|(万kWh)' " sortable
+          align='center' :render-header="renderheader">
         </el-table-column>
-        <el-table-column prop="powerSelfuse" label="自发自用电费|(元)" sortable align='center' :render-header="renderheader">
+        <el-table-column prop="powerOutput" :label="stateR=='month'?'自发自用电量|(kWh)':'自发自用电量|(万kWh)' " sortable
+          align='center' :render-header="renderheader">
+        </el-table-column>
+        <el-table-column prop="powerSelfuse" :label="stateR=='month'?' 自发自用电费|(元)':' 自发自用电费|(万元)'" sortable
+          align='center' :render-header="renderheader">
         </el-table-column>
       </el-table>
 
@@ -168,23 +177,7 @@ export default {
       stateM: true,
       timeStart: new Date(new Date().getFullYear(), 0),
       timeEnd: new Date(new Date().getFullYear(), 11),
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }],
+      tableData: [],
       pickerOptionsMonth1: {
         disabledDate: (time) => {
           return this.timeEnd ? time.getTime() > this.timeEnd.getTime() : false;
@@ -207,12 +200,16 @@ export default {
     tableData: {
       handler() {
         this.$nextTick(() => {
+
           let temp = document.querySelectorAll('.el-table .el-table__body-wrapper .el-table__row')
           if (temp.length > 0) {
-            if (temp[temp.length - 1].className.indexOf('el-table__row--striped') != -1) {
+
+            if (temp[temp.length - 1].className.indexOf('el-table__row--striped') == -1) {
+              console.log(11);
               let a = document.querySelectorAll('.el-table__footer-wrapper tbody td.el-table__cell')
               for (let i = 0; i < a.length; i++) {
                 a[i].style.backgroundColor = '#F8FCFF'
+
               }
             }
           }
@@ -230,7 +227,7 @@ export default {
     let date1 = this.timeStart.getFullYear() + '-' + (this.timeStart.getMonth() + 1)
     let date2 = this.timeEnd.getFullYear() + '-' + (this.timeEnd.getMonth() + 1)
     this.timeDate = [date1, date2]
-    this.stationId = '3'
+    // this.stationId = '3'
     let { componentId } = this.customConfig || {};
     componentId &&
       window.componentCenter?.register(
@@ -245,6 +242,13 @@ export default {
     //用于定义接收用户输入
     this.buttons = JSON.parse(buttons).data;
     this.defaultValue = JSON.parse(buttons).defaultValue;
+    this.$nextTick(() => {
+      let a = document.querySelectorAll('.el-table th.el-table__cell>.cell')
+      a.forEach((x, i) => {
+        if (i == 0) return
+        x.firstChild.style.paddingLeft = '24px'
+      });
+    })
     //业务代码
     if (this.defaultValue) {
       this.selected = this.defaultValue
@@ -417,6 +421,8 @@ export default {
       font-family: "Alibaba PuHuiTi";
 
     }
+
+
   }
 
   .peizhi {
@@ -461,8 +467,9 @@ export default {
       color: #fff;
       width: 85px;
       height: 32px;
-      border-radius: 2px;
+      border-radius: 3px;
       opacity: 1;
+
       border: 1px solid rgba(0, 132, 255, 1);
       background: rgba(0, 132, 255, 1);
       cursor: pointer;
@@ -475,11 +482,15 @@ export default {
 
   .tableBody {
 
+    color: #000000;
+
+    /deep/ .el-table {
+      color: #000;
+    }
 
     /deep/ .el-table .el-table__body-wrapper .el-table__row--striped td.el-table__cell {
       background: #F8FCFF;
       border-color: #D8DFE7;
-      color: #000000
     }
 
     /deep/ .el-table .el-table__body-wrapper .el-table__row td.el-table__cell {
@@ -489,7 +500,10 @@ export default {
     /deep/ .el-table__header-wrapper .has-gutter tr {
       background-color: #EBF5FF;
       border-color: #D8DFE7;
-      color: #000000
+      color: #000000;
+
+
+
     }
 
     /deep/ .el-table th.el-table__cell {
@@ -501,12 +515,20 @@ export default {
     /deep/.el-table th.el-table__cell>.cell {
       display: flex;
       justify-content: center;
+      align-items: center;
+
+      :nth-child(0) {
+        padding-left: 24px;
+      }
     }
 
     /deep/ .el-table__footer-wrapper tbody td.el-table__cell {
       background-color: transparent;
       border-color: #D8DFE7;
-      color: #000000
+
+      color: #000000;
+
+
     }
 
     /deep/ .el-table--border::after,
