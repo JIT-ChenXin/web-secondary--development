@@ -1,10 +1,15 @@
 import axios from "axios";
 import qs from "querystringify";
 
-// const apiContextPath = "http://192.168.1.240:43214";
+let apiContextPath = "";
+if (process.env.NODE_ENV === "development") {
+  document.cookie =
+    "token=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY2MzYzODIwMTE2MSwidXNlcklkIjoiMTIzNDU2Nzg5MCJ9.8NOJYO-NWeUSoiqNsc0GKebapGbNpGDlQPBQZ8SsRHU";
+  apiContextPath = "/api";
+}
 
 const instance = axios.create({
-  baseURL: `${process.env.REACT_APP_API}/sdata/rest`,
+  baseURL: `${apiContextPath}/sdata/rest`,
   timeout: 60000,
   validateStatus: function (status) {
     return status >= 200 && status < 300; // default

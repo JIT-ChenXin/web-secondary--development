@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Modal, Button, ConfigProvider } from "antd";
+import {
+  Row,
+  Col,
+  Modal,
+  Button,
+  ConfigProvider,
+  Input,
+  InputNumber,
+  Select,
+} from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import Tree from "../../common/Tree";
 import Table from "../../common/Table";
@@ -7,6 +16,7 @@ import useTreeData from "../../common/hooks/useTreeData";
 import useDelegator from "../../UseDelegator";
 import eventActionDefine from "../../msgCompConfig";
 import "./style.less";
+import { queryAssetData } from "../../api/asset";
 
 const conditionMap = {
   等于: 2,
@@ -21,6 +31,8 @@ const Add = (props) => {
     eventCenter,
     componentCenter,
   } = props;
+
+  const { Option } = Select;
 
   const [configuration, setConfiguration] = useState({});
   const [visible, setVisible] = useState(false);
@@ -42,7 +54,7 @@ const Add = (props) => {
   const triggerEventCenter = async ({ payload, event }) => {
     await eventCenter.triggerEventNew({
       objectId: formConfig?.id,
-      componentId: component.id,
+      componentId: component?.id,
       type: "report",
       event: event,
       payload: payload,
@@ -67,7 +79,7 @@ const Add = (props) => {
 
   // 事件中心注册挂载
   useDelegator(
-    component.id,
+    component?.id,
     { Event_Center_getName, do_EventCenter_filterData },
     eventActionDefine,
     formConfig?.id,
@@ -98,12 +110,127 @@ const Add = (props) => {
     setVisible(false);
   };
 
+  // 数据转换
+  const translatePlatformDataToJsonArray = (originTableData) => {
+    let originTableHeader = originTableData.data[0];
+    let tableHeader = [];
+    originTableHeader.forEach((item) => {
+      tableHeader.push(item.col_name);
+    });
+    let tableBody = originTableData.data[1];
+    let tableData = [];
+    tableBody.forEach((tableItem) => {
+      let temp = {};
+      tableItem.forEach((item, index) => {
+        temp[tableHeader[index]] = item;
+      });
+      tableData.push(temp);
+    });
+    return tableData;
+  };
+
+  const randerSearch = () => {
+    console.log("add---生成搜索条件");
+
+    let searchList = [
+      {
+        tag: "select",
+        tagName: "园区名称",
+        assetId: "d96aee4c-5d38-4292-acb2-f86322fe87b9",
+        showField: "",
+        saveField: "",
+      },
+      {
+        tag: "select",
+        tagName: "仪表种类",
+        assetId: "d96aee4c-5d38-4292-acb2-f86322fe87b9",
+        showField: "",
+        saveField: "",
+      },
+      {
+        tag: "number",
+        tagName: "仪表号",
+        assetId: "",
+        showField: "",
+        saveField: "",
+      },
+      {
+        tag: "text",
+        tagName: "仪表名称",
+        assetId: "",
+        showField: "",
+        saveField: "",
+      },
+    ];
+
+    let _domList = [];
+
+    searchList.forEach((item, index) => {
+      if (item.tag === "text") {
+        _domList.push(
+          <Row align="middle">
+            <Col span={5}>{item.tagName}: </Col>
+            <Col span={19}>
+              <Input placeholder={`请输入${item.tagName}`} />
+            </Col>
+          </Row>
+        );
+      } else if (item.tag === "number") {
+        _domList.push(
+          <Row align="middle">
+            <Col span={5}>{item.tagName}: </Col>
+            <Col span={19}>
+              <InputNumber
+                min={0}
+                style={{ width: "100%" }}
+                placeholder={`请输入${item.tagName}`}
+              />
+            </Col>
+          </Row>
+        );
+      } else if (item.tag === "select") {
+        let resData = [];
+        queryAssetData(item.assetId).then((res) => {
+          resData = translatePlatformDataToJsonArray(res);
+          console.log("resData", resData);
+        });
+        _domList.push(
+          <Row align="middle">
+            <Col span={5}>{item.tagName}: </Col>
+            <Col span={19}>
+              <Select
+                style={{ width: "100%" }}
+                placeholder={`请输入${item.tagName}`}
+              >
+                <Option value="jack">Jack</Option>
+                <Option value="lucy">Lucy</Option>
+                <Option value="Yiminghe">yiminghe</Option>
+              </Select>
+            </Col>
+          </Row>
+        );
+      }
+    });
+
+    return _domList;
+  };
+
   const contentRender = () => {
     return (
       <ConfigProvider locale={zhCN}>
         <div className="tree-table-add">
-          <Row>
-            <Col span={6}>
+          {/* 顶部组件 */}
+          <Row gutter={[30, 15]} className="search_box">
+            {randerSearch().map((item, index) => {
+              return (
+                <Col span={6} key={index}>
+                  {item}
+                </Col>
+              );
+            })}
+          </Row>
+          <Row gutter={18}>
+            <Col span={5}>
               <Tree
                 configuration={configuration}
                 treeData={treeState.treeData}
@@ -113,7 +240,7 @@ const Add = (props) => {
                 onSelect={handleTreeSelect}
               />
             </Col>
-            <Col span={12}>
+            <Col span={19}>
               <Table configuration={configuration} />
             </Col>
           </Row>
@@ -134,10 +261,7 @@ const Add = (props) => {
             onOk={saveModal}
             okText={"确认"}
             cancelText={"取消"}
-            width={1300}
-            bodyStyle={{
-              height: 600,
-            }}
+            width={1400}
           >
             {contentRender()}
           </Modal>

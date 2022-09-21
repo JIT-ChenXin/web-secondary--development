@@ -4,6 +4,8 @@ import { queryAssetData } from "../../api/asset";
 import "./style.less";
 
 const DesignConfiguration = (props) => {
+  const { Option } = Select;
+
   const {
     changeConfiguration = () => {},
     configuration: propsConfiguration = "",
@@ -202,6 +204,10 @@ const DesignConfiguration = (props) => {
               }}
             />
           </Col>
+        </Row>
+        <Row>
+          <Col span={12}>搜索条件</Col>
+          <Col span={12}></Col>
         </Row>
       </>
     );

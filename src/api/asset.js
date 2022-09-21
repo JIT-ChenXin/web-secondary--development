@@ -15,3 +15,7 @@ export const queryAssetData = (id, params, count) =>
 export const queryCustomData = (params) => {
   return request.post(`WisdomPark/queryMenuByAssetIdInfo`, params);
 };
+
+// 请求表格数据
+export const queryTableData = (dataForm) =>
+  request.post(`/WisdomPark/queryDataByAssetId`, dataForm);
