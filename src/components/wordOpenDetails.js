@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import {
-  chainCertAuth,
-  blockchainWrite,
-} from '../api/asset';
-import sha from 'sha.js';
-const getPersonalSm2VerifySign = import('./vue-ca-sign.common.js')
-import { Input, Select, Modal, message, Button } from 'antd';
-import { getSysVariableValues } from '../api/asset';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Form } from "@ant-design/compatible";
+import "@ant-design/compatible/assets/index.css";
+import { chainCertAuth, blockchainWrite } from "../api/asset";
+import sha from "sha.js";
+import * as getPersonalSm2VerifySign from "./vue-ca-sign.common.js";
+import { Input, Select, Modal, message, Button } from "antd";
+import { getSysVariableValues } from "../api/asset";
+
+// const getPersonalSm2VerifySign = import('./vue-ca-sign.common.js')
 
 const { Option } = Select;
 
@@ -57,16 +56,15 @@ class WordOpenDetails extends Component {
     form.validateFields(async (err, values) => {
       if (!err) {
         let checkedData;
-        dataSource.map(item => {
+        dataSource.map((item) => {
           if (item.certId === values.certId) {
             checkedData = item;
           }
         });
-        const mnemonic = sha('sha256')
-          .update(values.word)
-          .digest('hex');
+        const mnemonic = sha("sha256").update(values.word).digest("hex");
         const certIdentityNumberHash =
           checkedData.certData.companyIdentityNumber;
+        console.log(getPersonalSm2VerifySign);
         const data = await getPersonalSm2VerifySign.sm2.getMnemonic(
           mnemonic,
           certIdentityNumberHash
@@ -74,11 +72,11 @@ class WordOpenDetails extends Component {
         const imestamp = new Date().getTime();
         const passwordInfo =
           checkedData.userData.identityNumberHash +
-          '-' +
-          sha('sha256')
+          "-" +
+          sha("sha256")
             .update(checkedData.certData.companyIdentityNumber)
-            .digest('hex') +
-          '-' +
+            .digest("hex") +
+          "-" +
           imestamp;
         const prvKeySign = await getPersonalSm2VerifySign.sm2.sm2Sign(
           data.currentPrv,
@@ -86,10 +84,10 @@ class WordOpenDetails extends Component {
         );
         try {
           const { BLOCK_CHAIN_CONFIG = {} } = window.configuration || {};
-          let blockChainConfig = BLOCK_CHAIN_CONFIG.current_value || '{}';
+          let blockChainConfig = BLOCK_CHAIN_CONFIG.current_value || "{}";
           try {
             blockChainConfig =
-              typeof blockChainConfig === 'string'
+              typeof blockChainConfig === "string"
                 ? JSON.parse(blockChainConfig)
                 : blockChainConfig;
           } catch (error) {
@@ -153,13 +151,13 @@ class WordOpenDetails extends Component {
           </Button>,
         ]}
       >
-        <Form layout={'Vertical'}>
+        <Form layout={"Vertical"}>
           <FormItem
             className="analyzer-name"
             label={`请选择证书`}
             {...formItemLayout}
           >
-            {form.getFieldDecorator('certId', {
+            {form.getFieldDecorator("certId", {
               rules: [
                 {
                   required: true,
@@ -183,11 +181,11 @@ class WordOpenDetails extends Component {
             label="请输入助记词"
             {...formItemLayout}
           >
-            {form.getFieldDecorator('word', {
+            {form.getFieldDecorator("word", {
               rules: [
                 {
                   required: true,
-                  message: '必填',
+                  message: "必填",
                 },
               ],
             })(

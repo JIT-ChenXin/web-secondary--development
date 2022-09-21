@@ -5,6 +5,7 @@ import WordOpenDetails from "../wordOpenDetails";
 const List = ({
   allParams
 }) => {
+  console.log(allParams);
   const [stateObj, setStateObj] = useState(true);
   const { params, stateParams, propsParams } = allParams;
   const { buttonInfo = {}, record } = params;

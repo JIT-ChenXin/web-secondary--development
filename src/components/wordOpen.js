@@ -1,17 +1,17 @@
 /*
  * @Author: shijunwen
  * @Email: shijunwen@njsdata.com
- * @LastEditors: jiangsixian jiangsixian@njsdata.com
+ * @LastEditors: shijunwen
  * @Date: 2021-05-26 10:29:27
- * @LastEditTime: 2022-09-19 19:14:32
- * @FilePath: \Blockchain\src\components\wordOpen.js
+ * @LastEditTime: 2021-05-26 11:49:17
+ * @FilePath: \onemind-web\src\data-reporting-new\application\list\custom_event_method\popup.js
  * @Description: 弹窗打开
  */
 import React from 'react';
 import WordOpenDetails from './wordOpenDetails';
 
-const wordOpen = allParams => {
-  const { params, setStateObj, stateParams, propsParams } = allParams;
+const wordOpen = props => {
+  const { params, setStateObj, stateParams, propsParams } = props.allParams;
   const { buttonInfo = {}, record } = params;
   const { selectedRows, eventCenterInstance } = stateParams;
   const { id } = propsParams;
