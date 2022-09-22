@@ -67,7 +67,6 @@ const Set = (props) => {
 
   const randerSearch = () => {
     console.log("set---生成搜索条件");
-
     let searchList = [
       {
         tag: "select",
@@ -126,10 +125,10 @@ const Set = (props) => {
         );
       } else if (item.tag === "select") {
         let resData = [];
-        queryAssetData(item.assetId).then((res) => {
-          resData = translatePlatformDataToJsonArray(res);
-          console.log("resData", resData);
-        });
+        // queryAssetData(item.assetId).then((res) => {
+        //   resData = translatePlatformDataToJsonArray(res);
+        //   console.log("resData", resData);
+        // });
         _domList.push(
           <Row align="middle">
             <Col span={5}>{item.tagName}: </Col>

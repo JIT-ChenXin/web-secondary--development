@@ -17,6 +17,60 @@
   .table_showList {
     border: 1px solid #f0f0f0;
     height: 100%;
-    text-align: center;
+    min-width: 200px;
+
+    .topBox {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1;
+      padding: 0 5px;
+      height: 40px;
+      line-height: 40px;
+      color: #9d9c9b;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+
+      .allClear {
+        cursor: pointer;
+        user-select: none;
+        font-weight: 700;
+        color: #6ba0e7;
+      }
+    }
+
+    .selectDataShow {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      height: calc(100% - 80px);
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      .selectItem {
+        width: 90%;
+        height: 30px;
+        line-height: 30px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #000000;
+        text-indent: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .selectbottom {
+      display: flex;
+      padding-left: 5px;
+      flex: 1;
+      height: 40px;
+      line-height: 40px;
+      color: #b1aeb6;
+      font-size: 14px;
+      border-top: 1px solid #f0f0f0;
+      box-sizing: border-box;
+    }
   }
 }

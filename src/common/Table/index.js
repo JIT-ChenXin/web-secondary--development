@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Table, Row, Col } from "antd";
+import { Table, Row, Col, Tooltip } from "antd";
 import { queryTableData } from "../../api/asset";
 import "./style.less";
 
 const TableContainer = (props) => {
   // 配置项
   const { configuration } = props;
+  // 右側求和
+  const allSums = configuration.rightAllSum ? configuration.rightAllSum : ""
+  // 右側是否顯示
+  const rightShow = configuration.rightShow ? configuration.rightShow : true
+  // 右側顯示字段
+  const changeKey = configuration.rightShowField ? configuration.rightShowField : "roomName"
+  console.log('allSums:', allSums, 'rightShow:', rightShow, "changeKey:", changeKey);
+
   // 单选多选
   const [selectionType, setSelectionType] = useState("checkbox");
-
   // 表格列数据
   const [tableColumns, setTableColumns] = useState([]);
   // 表格行数据
@@ -20,7 +27,9 @@ const TableContainer = (props) => {
     pageSize: 10,
   });
   // 表格选中数据
-  const [tableSelectRow, setTableSelectRow] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [tableSelectedRow, setTableSelectedRow] = useState([]);
+    
   // 表格查询条件
   const [queryForm, setQueryForm] = useState({
     queryCondition: {
@@ -37,12 +46,11 @@ const TableContainer = (props) => {
   useEffect(() => {
     // 单选多选
     configuration.tableIsCheckBox
-      ? setSelectionType("checkbox")
-      : setSelectionType("radio");
+      ? setSelectionType("radio")
+      : setSelectionType("checkbox");
     getTableData();
-
     console.log("queryForm", queryForm);
-  }, [props?.configuration]);
+  }, []);
 
   // 数据转换
   const translatePlatformDataToJsonArray = (originTableData) => {
@@ -60,6 +68,7 @@ const TableContainer = (props) => {
       });
       tableData.push(temp);
     });
+    console.log('tableData', tableData);
     return tableData;
   };
 
@@ -185,8 +194,18 @@ const TableContainer = (props) => {
 
   // 选中行数据
   const rowSelection = {
-    onChange: (index, row) => {
-      setTableSelectRow(row);
+    selectedRowKeys,
+    onChange: (row) => {
+      setSelectedRowKeys(row);
+      let tableSelectedRows = [];
+      for (let index = 0; index < row.length; index++) {
+        for (let nums = 0; nums < tableData.length; nums++) {
+          if (tableData[nums].data_id === row[index]) {
+            tableSelectedRows.push(tableData[nums])
+          }
+        }
+      }
+      setTableSelectedRow(tableSelectedRows); 
     },
   };
 
@@ -199,9 +218,24 @@ const TableContainer = (props) => {
     });
   };
 
+  // 清除選中
+  const allClear = ()=>{
+    setSelectedRowKeys([]); 
+    setTableSelectedRow([]); 
+  }
+
+  // 求和
+  const addSum = (data)=> {
+    let sumResult = 0
+    data.reduce((preValue, curValue) =>{
+      return sumResult = preValue + parseInt(curValue[allSums]);
+    }, sumResult);
+    return sumResult;
+  };
+
   return (
     <Row className="zhyq_table_all">
-      <Col span={19}>
+      <Col span={rightShow ? 19 : 24}>
         <Table
           bordered
           dataSource={tableData}
@@ -227,9 +261,32 @@ const TableContainer = (props) => {
           }}
         />
       </Col>
-      <Col span={5}>
-        <div className="table_showList"></div>
-      </Col>
+      {
+        rightShow && (
+          <Col span={5}>
+            <div className="table_showList">
+              <div className="topBox">
+                <span>已选择{selectedRowKeys.length}个</span>
+                <span className="allClear" onClick={allClear}>全部清除</span>
+              </div>
+              <div className="selectDataShow">
+                {
+                  tableSelectedRow.map(x => {
+                    return (
+                      <Tooltip key={x.data_id} placement="left" title={x[changeKey]}>
+                        <div className="selectItem">{x[changeKey]}</div>
+                      </Tooltip>
+                    )
+                  })
+                }
+              </div>
+              {
+                allSums !== "" && <div className="selectbottom">已选面积：{addSum(tableSelectedRow)} ㎡</div>
+              }
+            </div>
+          </Col>
+        )
+      }
     </Row>
   );
 };

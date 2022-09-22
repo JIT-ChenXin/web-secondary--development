@@ -61,6 +61,9 @@ const DesignConfiguration = (props) => {
       tableAssetId = "",
       tableShowField = "",
       tableIsCheckBox = "",
+      rightShowField = "",
+      rightAllSum = "",
+      rightShow = true,
     } = configuration;
     return (
       <>
@@ -208,6 +211,39 @@ const DesignConfiguration = (props) => {
         <Row>
           <Col span={12}>搜索条件</Col>
           <Col span={12}></Col>
+        </Row>
+        <Row>
+          <Col span={12}>右边显示字段</Col>
+          <Col span={12}>
+            <Input
+              value={rightShowField}
+              onChange={(e) => {
+                onValueChange("rightShowField", e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>自动求和字段</Col>
+          <Col span={12}>
+            <Input
+              value={rightAllSum}
+              onChange={(e) => {
+                onValueChange("rightAllSum", e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>是否展示右边</Col>
+          <Col span={12}>
+            <Switch
+              checked={rightShow}
+              onChange={(e) => {
+                onValueChange("rightShow", e);
+              }}
+            />
+          </Col>
         </Row>
       </>
     );
