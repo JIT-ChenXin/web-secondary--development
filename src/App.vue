@@ -1,7 +1,7 @@
 <template>
   <div class="statisticalPage">
     <div class="statisticalHead">
-      <el-radio-group v-model="reportType" @change="reportChange">
+      <el-radio-group v-model="reportType" text-color="#1B85FF" @change="reportChange">
         <el-radio-button label="日报"></el-radio-button>
         <el-radio-button label="月报"></el-radio-button>
         <el-radio-button label="年报"></el-radio-button>
@@ -9,57 +9,53 @@
     </div>
     <div class="tabPage">
       <div class="statisticalDateOf">
-        <div class="leftBox">
-          <el-button class="marginR" type="primary" icon="el-icon-arrow-left" size="small" @click="addDate('reduce')">{{ pickerUp }}</el-button>
-          <el-date-picker v-show="reportType === '日报'" class="marginR" v-model="selectDate" size="small" :editable="false" value-format="yyyy-MM-dd" key="date" type="date"></el-date-picker>
-          <el-date-picker v-show="reportType === '月报'" class="marginR" v-model="selectDate" size="small" :editable="false" value-format="yyyy-MM" key="month" type="month"></el-date-picker>
-          <el-date-picker v-show="reportType === '年报'" class="marginR" v-model="selectDate" size="small" :editable="false" value-format="yyyy" key="year" type="year"></el-date-picker>
-          <el-button class="marginR" type="primary" size="small" @click="addDate('add')">
-            {{ pickerDown }}
-            <i class="el-icon-arrow-right el-icon--right"></i>
-          </el-button>
-          <el-button style="width: 80px" type="primary" size="small" @click="getReportsData">查询</el-button>
+        <div v-show="reportType != '年报'" class="leftBox">
+          <el-date-picker v-show="reportType === '日报'" class="marginR" v-model="selectDate" size="small" :editable="false" value-format="yyyy-MM" key="month" type="month" @change="getReportsData"></el-date-picker>
+          <el-date-picker v-show="reportType === '月报'" class="marginR" v-model="selectDate" size="small" :editable="false" value-format="yyyy" key="year" @change="getReportsData" type="year"></el-date-picker>
+          <img class="dateImg" src="../pluginTemp/images/dateimg.png" alt="" />
         </div>
-        <el-button class="exportBtn" type="primary" size="small" @click="exportReportsData">导出</el-button>
+        <!-- <el-button
+          class="exportBtn"
+          type="primary"
+          size="small"
+          @click="exportReportsData"
+          >导出</el-button> -->
+        <img class="exportImg" src="../pluginTemp/images/exports.png" alt="" @click="exportReportsData" />
       </div>
       <div ref="tableBox" class="tableBox">
-        <div class="toplab">
-          <div class="tableTop">
-            <div class="title">电站名称</div>
-            <div class="content">{{ reportObj.station_name }}</div>
-          </div>
-          <div class="tableTop" style="width: 30%">
-            <div class="title">装机容量</div>
-            <div class="content">{{ reportObj.machine_volume }}&nbsp;kWp</div>
-          </div>
+        <div class="tableTop">
+          <div class="title">电站名称</div>
+          <div class="content">{{ reportObj.name }}</div>
         </div>
-        <el-table :data="tableData" max-height="500px" :summary-method="getSummaries" :cell-style="changeCellStyle" style="width: 100%">
-          <el-table-column prop="name" label="" align="center" width="110" class-name="textClass"></el-table-column>
-          <el-table-column prop="all" sortable align="center" min-width="120" :label="`总（${tableUnit}）`"></el-table-column>
-          <el-table-column prop="jian" sortable align="center" min-width="120" :label="`尖（${tableUnit}）`"></el-table-column>
-          <el-table-column prop="feng" sortable align="center" min-width="120" :label="`峰（${tableUnit}）`"></el-table-column>
-          <el-table-column prop="ping" sortable align="center" min-width="120" :label="`平（${tableUnit}）`"></el-table-column>
-          <el-table-column prop="gu" sortable align="center" min-width="120" :label="`谷（${tableUnit}）`"></el-table-column>
-        </el-table>
-        <div class="tabel_title">{{ powerGeneration }}</div>
-        <el-table :data="deviationTableData" max-height="500px" :summary-method="getSummaries" :cell-style="changeCellStyle" style="width: 100%">
-          <el-table-column prop="time" sortable :label="tableTitle" align="center" width="110"></el-table-column>
-          <el-table-column prop="power_eq" sortable align="center" min-width="120" :label="`逆变器发电量（${deviationUnit}）`"></el-table-column>
-          <el-table-column prop="power_db" sortable align="center" min-width="120" :label="`计量表发电量（${deviationUnit}）`"></el-table-column>
-          <el-table-column prop="deviation_rate" sortable align="center" label="偏差率（%）"></el-table-column>
-        </el-table>
-        <div class="tabel_title">图表</div>
-        <div ref="lineEchart" id="lineEchart" class="lineEchart"></div>
-        <!-- <img :src="echartImg" style="width: 100%; height: 350px" alt="" /> -->
-        <div class="tabel_title">逆变器事件报警</div>
-        <el-table :data="alarmTableData" max-height="500px" :summary-method="getSummaries" :cell-style="changeCellStyle" style="width: 100%">
-          <el-table-column prop="equipment_name" sortable label="逆变器名称" align="center" width="120"></el-table-column>
-          <el-table-column prop="total_cnt" sortable align="center" label="总计" min-width="80"></el-table-column>
-          <el-table-column prop="sg_cnt" sortable align="center" label="事故" min-width="80"></el-table-column>
-          <el-table-column prop="yc_cnt" sortable align="center" label="异常" min-width="80"></el-table-column>
-          <el-table-column prop="bw_cnt" sortable align="center" label="变位" min-width="80"></el-table-column>
-          <el-table-column prop="gz_cnt" sortable align="center" label="告知" min-width="80"></el-table-column>
-          <el-table-column prop="yx_cnt" sortable align="center" label="越限" min-width="80"></el-table-column>
+        <!-- <div v-if="parmasType != 'object'" class="tableTop">
+          <div class="title">客户名称</div>
+          <div class="content">{{ reportObj.belong_customer }}</div>
+        </div> -->
+        <div class="tableTop">
+          <div class="title">装机容量</div>
+          <div class="content">{{ Number(reportObj.machine_volume).toFixed(2) }}&nbsp;kWp</div>
+        </div>
+        <!-- <div v-if="parmasType != 'object'" class="tableTop">
+          <div class="title">地址</div>
+          <div class="content">{{ reportObj.collector_address }}</div>
+        </div> -->
+        <!-- :max-height="tableHeight" -->
+        <el-table :data="tableData" :summary-method="getSummaries" show-summary :border="true" :stripe="true" :cell-style="changeCellStyle" style="width: 100%">
+          <el-table-column prop="time" sortable label="日期" align="center" width="210"></el-table-column>
+          <el-table-column prop="power_output" sortable align="center" :label="`发电量（${tableUnit}）`"></el-table-column>
+          <el-table-column prop="equivalentTime" sortable align="center" label="等效时数（h）"></el-table-column>
+          <!-- <el-table-column
+            prop="swdl"
+            sortable
+            align="center"
+            :label="`上网电量（${tableUnit}）`"
+          ></el-table-column>
+          <el-table-column
+            prop="zfzydl"
+            sortable
+            align="center"
+            :label="`自发自用电量（${tableUnit}）`"
+          ></el-table-column> -->
         </el-table>
       </div>
     </div>
@@ -71,20 +67,7 @@
 import eventActionDefine from './components/msgCompConfig'
 import './index.css'
 import { queryReportsData, exportReports } from './api/asset'
-import * as echarts from 'echarts'
 import moment from 'moment'
-// 防抖
-const debounce = (func, ms) => {
-  let timer
-  return function (...args) {
-    if (timer) {
-      clearTimeout(timer)
-    }
-    timer = setTimeout(() => {
-      func.apply(this, args)
-    }, ms)
-  }
-}
 export default {
   name: 'App',
   props: {
@@ -92,19 +75,10 @@ export default {
   },
   computed: {
     pickerUp() {
-      return this.reportType === '日报' ? '上一日' : this.reportType === '月报' ? '上一月' : '上一年'
+      return this.reportType === '日报' ? '上一月' : '上一年'
     },
     pickerDown() {
-      return this.reportType === '日报' ? '下一日' : this.reportType === '月报' ? '下一月' : '下一年'
-    },
-    powerGeneration() {
-      return this.reportType === '日报' ? '日发电时段' : this.reportType === '月报' ? '月发电时段' : '年发电时段'
-    },
-    tableTitle() {
-      return this.reportType === '日报' ? '时间' : this.reportType === '月报' ? '日期' : '月份'
-    },
-    deviationUnit() {
-      return this.reportType === '年报' ? '万kWh' : 'kWh'
+      return this.reportType === '日报' ? '下一月' : '下一年'
     },
     tableUnit() {
       return this.reportType === '日报' ? 'kWh' : '万kWh'
@@ -112,33 +86,24 @@ export default {
   },
   data() {
     return {
-      echartImg: '',
-      timer: null,
-      myChart: null,
       parmasType: '',
       paramsId: '',
       reportType: '日报',
       selectDate: '',
       tableData: [],
-      alarmTableData: [],
-      deviationTableData: [],
-      xAxisData: [],
-      eqData: [],
-      dbData: [],
-      rateData: [],
       tableHeight: 570,
       reportObj: {
+        belong_customer: '',
+        collector_address: '',
         machine_volume: '',
         name: '',
       },
     }
   },
   created() {
-    this.selectDate = moment(new Date()).format('YYYY-MM-DD')
+    this.selectDate = moment(new Date()).format('YYYY-MM')
   },
   mounted() {
-    // this.dataType({ id: '1' })
-
     let { componentId } = this.customConfig || {}
     componentId && window.componentCenter?.register(componentId, 'comp', this, eventActionDefine)
     this.tableHeight = this.$refs.tableBox.offsetHeight
@@ -175,64 +140,39 @@ export default {
     async getReportsData() {
       let params = {
         id: this.paramsId,
+        // id: '116,119',
         date: this.selectDate,
       }
-      console.log('params=============>', params)
+      // console.log('params=============>', params)
       if (params.id == '' || params.id[0] == '') return
-      let { data } = await queryReportsData(params)
-      let { electricityStatistics, generateElectricity, alarmReport } = data
-      this.reportObj = {
-        station_name: electricityStatistics.station_name,
-        machine_volume: electricityStatistics.station_id,
-      }
-      this.tableData = [
-        {
-          name: '发电量',
-          all: electricityStatistics.power_all,
-          jian: electricityStatistics.power_j,
-          feng: electricityStatistics.power_f,
-          ping: electricityStatistics.power_p,
-          gu: electricityStatistics.power_g,
-        },
-        {
-          name: '上网电量',
-          all: electricityStatistics.swdl_all,
-          jian: electricityStatistics.swdl_j,
-          feng: electricityStatistics.swdl_f,
-          ping: electricityStatistics.swdl_p,
-          gu: electricityStatistics.swdl_g,
-        },
-        {
-          name: '自发自用电量',
-          all: electricityStatistics.zfzydl_all,
-          jian: electricityStatistics.zfzydl_j,
-          feng: electricityStatistics.zfzydl_f,
-          ping: electricityStatistics.zfzydl_p,
-          gu: electricityStatistics.zfzydl_g,
-        },
-      ]
-      this.alarmTableData = alarmReport
-      this.xAxisData = []
-      this.eqData = []
-      this.dbData = []
-      this.rateData = []
-      this.deviationTableData = generateElectricity.map((x) => {
-        x.time = '6:00'
-        this.xAxisData.push(x.time)
-        if (this.reportType === '日报') {
-          let end = parseInt(x.time.split(':')[0]) + 1 + ':00'
-          x.time = x.time + '-' + end
-        }
-        this.eqData.push(x.power_eq)
-        this.dbData.push(x.power_db)
-        this.rateData.push(x.deviation_rate)
-        return x
-      })
-      // console.log('data', data)
-      // console.log('this.tableData', this.tableData)
-      // console.log('this.alarmTableData', this.alarmTableData)
-      // console.log('generateElectricity', generateElectricity)
-      this.initEcharts()
+      await queryReportsData(params)
+        .then((res) => {
+          let { data } = res
+          this.tableData = data.detail.map((x) => {
+            x.equivalentTime = x.equivalentTime
+            x.power_output = x.power_output
+            // x.equivalentTime = Number(x.equivalentTime.replace(/,/g, ''));
+            // x.power_output = Number(x.power_output.replace(/,/g, ''));
+            return x
+          })
+          Object.keys(this.reportObj).forEach((x) => {
+            this.reportObj[x] = data[x]
+          })
+          console.log('this.tableData', this.tableData)
+        })
+        .catch((err) => {
+          // console.log('err',err);
+          let { data } = err
+          this.reportObj = {
+            belong_customer: '',
+            collector_address: '',
+            machine_volume: '',
+            name: '',
+          }
+          this.tableData = []
+          // this.$message.error(data.message)
+          alert(data.message)
+        })
     },
     // 报表导出
     AsciiToString(asccode) {
@@ -260,18 +200,11 @@ export default {
 
       return uzipStr
     },
-    async exportReportsData() {
-      let echartImg = this.myChart.getDataURL({
-        pixelRatio: 2,
-      })
-      // echartImg = await this.translateBase64ImgToBlob(echartImg, 'image/jpeg')
-      // console.log('echartImg', echartImg)
-      // let fileIm = new FormData()
-      // fileIm.append('file', echartImg, 'echartImg.image')
+    exportReportsData() {
       let params = {
         id: this.paramsId,
-        decode: echartImg,
-        time: this.selectDate,
+        // id: '105,99',
+        date: this.selectDate,
       }
       exportReports(params)
         .then((res) => {
@@ -319,19 +252,17 @@ export default {
       console.log('报表类型', val)
       switch (val) {
         case '日报':
-          this.selectDate = moment(new Date()).format('YYYY-MM-DD')
-          break
-        case '月报':
           this.selectDate = moment(new Date()).format('YYYY-MM')
           break
-        default:
+        case '月报':
           this.selectDate = moment(new Date()).format('YYYY')
+          break
+        default:
+          this.selectDate = ''
           break
       }
       this.getReportsData()
-      this.initEcharts()
     },
-    // 合计
     getSummaries(param) {
       const { columns, data } = param
       const sums = []
@@ -359,225 +290,27 @@ export default {
       return sums
     },
     changeCellStyle(row, column, rowIndex, columnIndex) {
-      if (row.column.label === '时间' || row.column.label === '日期' || row.column.label === '月份') {
-        return 'font-weight: 700' // 修改的样式
+      if (row.column.label === '日期') {
+        return 'font-weight: 400' // 修改的样式
       } else {
         return ''
       }
     },
     // 日期加减
     addDate(type) {
-      if (this.reportType === '日报') {
-        if (type === 'reduce') {
-          this.selectDate = moment(this.selectDate).subtract(1, 'day').startOf('day').format('YYYY-MM-DD')
-        } else {
-          this.selectDate = moment(this.selectDate).add(1, 'day').startOf('day').format('YYYY-MM-DD')
-        }
-      } else if (this.reportType === '月报') {
-        if (type === 'reduce') {
-          this.selectDate = moment(this.selectDate).subtract(1, 'month').startOf('month').format('YYYY-MM')
-        } else {
-          this.selectDate = moment(this.selectDate).add(1, 'month').startOf('month').format('YYYY-MM')
-        }
-      } else if (this.reportType === '年报') {
+      if (this.reportType === '月报') {
         if (type === 'reduce') {
           this.selectDate = moment(this.selectDate).subtract(1, 'year').startOf('year').format('YYYY')
         } else {
           this.selectDate = moment(this.selectDate).add(1, 'year').startOf('year').format('YYYY')
         }
-      }
-    },
-    // 初始化图表
-    initEcharts() {
-      const colors = ['#70b603', '#027db4', '#0000bf']
-      if (this.myChart !== null && this.myChart !== '' && this.myChart !== undefined) {
-        this.myChart.dispose() //销毁
-      }
-      let lineEchart = this.$refs.lineEchart
-      this.myChart = echarts.init(lineEchart)
-      let option = {
-        color: colors,
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'cross',
-          },
-        },
-        grid: {
-          left: '4%',
-          right: '4%',
-        },
-        // toolbox: {
-        //   feature: {
-        //     saveAsImage: { show: true },
-        //   },
-        // },
-        legend: {
-          itemHeight: 18,
-          itemWidth: 36,
-          itemGap: 200,
-          icon: 'rect',
-          data: [
-            {
-              name: '发电量(逆变器)',
-              icon: 'rect',
-            },
-            {
-              name: '发电量(计量表)',
-              icon: 'rect',
-            },
-            {
-              name: '偏差率',
-              icon: '',
-            },
-          ],
-        },
-        xAxis: [
-          {
-            type: 'category',
-            axisTick: {
-              alignWithLabel: true,
-            },
-            data: this.xAxisData,
-          },
-        ],
-        yAxis: [
-          // {
-          //   type: 'value',
-          //   name: 'h',
-          //   position: 'right',
-          //   alignTicks: true,
-          //   nameTextStyle: {
-          //     color: '#9898b3',
-          //   },
-          //   axisLine: {
-          //     show: true,
-          //     lineStyle: {
-          //       color: '#ebebeb',
-          //     },
-          //   },
-          //   axisLabel: {
-          //     color: '#333',
-          //     formatter: '{value}',
-          //   },
-          //   splitLine: {
-          //     show: false, // y轴网格线
-          //   },
-          // },
-          {
-            type: 'value',
-            name: '%',
-            position: 'right',
-            alignTicks: true,
-            offset: 0,
-            nameTextStyle: {
-              color: '#9898b3',
-            },
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: '#ebebeb',
-              },
-            },
-            axisLabel: {
-              color: '#333',
-              formatter: '{value}',
-            },
-            splitLine: {
-              show: false, // y轴网格线
-            },
-          },
-          {
-            type: 'value',
-            name: this.deviationUnit,
-            position: 'left',
-            alignTicks: true,
-            nameTextStyle: {
-              color: '#9898b3',
-            },
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: '#ebebeb',
-              },
-            },
-            axisLabel: {
-              color: '#333',
-              formatter: '{value}',
-            },
-            splitLine: {
-              show: false, // y轴网格线
-            },
-          },
-        ],
-        series: [
-          {
-            name: '发电量(逆变器)',
-            type: 'bar',
-            barWidth: 30,
-            data: this.eqData,
-          },
-          {
-            name: '发电量(计量表)',
-            type: 'bar',
-            barWidth: 30,
-            // yAxisIndex: 1,
-            data: this.dbData,
-          },
-          {
-            name: '偏差率',
-            type: 'line',
-            showSymbol: false,
-            smooth: true,
-            yAxisIndex: 1,
-            data: this.rateData,
-          },
-        ],
-      }
-
-      option && this.myChart.setOption(option)
-      const task = () => {
-        this.myChart.resize()
-      }
-      window.addEventListener('resize', debounce(task, 300))
-    },
-    stringToByte(str) {
-      var bytes = new Array()
-      var len, c
-      len = str.length
-      for (var i = 0; i < len; i++) {
-        c = str.charCodeAt(i)
-        if (c >= 0x010000 && c <= 0x10ffff) {
-          bytes.push(((c >> 18) & 0x07) | 0xf0)
-          bytes.push(((c >> 12) & 0x3f) | 0x80)
-          bytes.push(((c >> 6) & 0x3f) | 0x80)
-          bytes.push((c & 0x3f) | 0x80)
-        } else if (c >= 0x000800 && c <= 0x00ffff) {
-          bytes.push(((c >> 12) & 0x0f) | 0xe0)
-          bytes.push(((c >> 6) & 0x3f) | 0x80)
-          bytes.push((c & 0x3f) | 0x80)
-        } else if (c >= 0x000080 && c <= 0x0007ff) {
-          bytes.push(((c >> 6) & 0x1f) | 0xc0)
-          bytes.push((c & 0x3f) | 0x80)
+      } else {
+        if (type === 'reduce') {
+          this.selectDate = moment(this.selectDate).subtract(1, 'month').startOf('month').format('YYYY-MM')
         } else {
-          bytes.push(c & 0xff)
+          this.selectDate = moment(this.selectDate).add(1, 'month').startOf('month').format('YYYY-MM')
         }
       }
-      return bytes
-    },
-    translateBase64ImgToBlob(base64, contentType) {
-      let arr = base64.split(',') //去掉base64格式图片的头部
-      let bstr = atob(arr[1]) //atob()方法将数据解码
-      let leng = bstr.length
-      let u8arr = new Uint8Array(leng)
-      while (leng--) {
-        u8arr[leng] = bstr.charCodeAt(leng) //返回指定位置的字符的 Unicode 编码
-      }
-      let blob = new Blob([u8arr], { type: contentType })
-      // var blobImg = {}
-      // blobImg.url = URL.createObjectURL(blob) //创建URL
-      // blobImg.name = new Date().getTime() + '.png'
-      return blob
     },
   },
   destroyed() {
@@ -595,14 +328,26 @@ export default {
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 20px);
-  padding: 0 20px 20px 20px;
+  height: 100%;
+  padding: 0 25px;
   .statisticalHead {
     margin-top: 20px;
     width: 100%;
     min-width: 500px;
+
     /deep/.el-radio-button__inner {
-      width: 140px;
+      font-family: 'Alibaba PuHuiTi';
+      font-size: 16px;
+      color: #000000;
+      padding: 0;
+      height: 32px;
+      width: 80px;
+      line-height: 30px;
+      // background-color: transparent;
+    }
+    /deep/.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+      background-color: transparent !important;
+      font-weight: 700;
     }
   }
 
@@ -614,106 +359,132 @@ export default {
       display: flex;
       align-items: center;
       .leftBox {
+        position: relative;
+        display: flex;
+        align-items: center;
         .marginR {
-          margin-right: 20px;
+          width: 150px;
+          /deep/.el-input__prefix {
+            display: none;
+          }
+          /deep/.el-input__inner {
+            color: #98999a;
+            padding-left: 15px;
+            background: #eff0f0;
+          }
+        }
+        .dateImg {
+          position: absolute;
+          right: 1px;
+          width: 32px;
+          height: 32px;
+          border-top-right-radius: 0px;
+          border-bottom-right-radius: 0px;
         }
       }
-      .exportBtn {
+      // .exportBtn {
+      //   margin-left: auto;
+      //   margin-right: 20px;
+      //   right: 0px;
+      //   width: 80px;
+      // }
+      .exportImg {
         margin-left: auto;
-        margin-right: 20px;
         right: 0px;
-        width: 80px;
+        width: 85px;
+        height: 32px;
       }
     }
     .tableBox {
       background: #ffffff;
       margin-top: 20px;
-      padding: 0 20px;
-      padding-bottom: 20px;
-      box-shadow: 0 0 5px 5px #f3f4f5;
+      // padding: 0 20px;
+      // box-shadow: 0 0 5px 5px #f3f4f5;
       padding-top: 10px;
-      height: calc(100% - 70px);
-      overflow-y: scroll;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-        height: 8px;
-        background: #f5f5f5;
-      }
-      /*定义滑块内阴影+圆角*/
-      &::-webkit-scrollbar-thumb {
-        background: #333333;
-        border-radius: 10px;
-      }
-
-      /*定义滚动条轨道内阴影+圆角*/
-      &::-webkit-scrollbar-track {
-        background: #fff;
-      }
-
-      .toplab {
-        width: 100%;
+      // height: calc(100% - 70px);
+      // .tableTop {
+      //   display: flex;
+      //   align-items: center;
+      //   width: 100%;
+      //   font-size: 14px;
+      //   line-height: 48px;
+      //   text-align: left;
+      //   border-top: 1px solid #ebedf0;
+      //   .title {
+      //     text-indent: 25px;
+      //     font-weight: 700;
+      //     width: 110px;
+      //     min-width: 110px;
+      //     background: #f8f8f8;
+      //   }
+      //   .content {
+      //     padding-left: 20px;
+      //     color: #333333;
+      //   }
+      // }
+      .tableTop {
         display: flex;
-        justify-content: space-between;
-
-        .tableTop {
-          display: flex;
-          align-items: center;
-          width: 70%;
-          font-size: 14px;
-          line-height: 48px;
-          text-align: left;
-          border-top: 1px solid #ebedf0;
-          .title {
-            text-indent: 25px;
-            font-weight: 700;
-            width: 110px;
-            min-width: 110px;
-            background: #f8f8f8;
-          }
-          .content {
-            padding-left: 20px;
-            color: #333333;
-          }
+        align-items: center;
+        flex: 1;
+        font-size: 14px;
+        line-height: 39px;
+        text-align: left;
+        border-top: 1px solid rgba(208, 218, 228, 1);
+        border-right: 1px solid rgba(208, 218, 228, 1);
+        border-left: 1px solid rgba(208, 218, 228, 1);
+        .title {
+          text-align: center;
+          color: #000000;
+          font-weight: 700;
+          width: 210px;
+          min-width: 210px;
+          background: #ebf5ff;
+          box-sizing: border-box;
+          border-right: 1px solid rgba(208, 218, 228, 1);
         }
+        .content {
+          padding-left: 20px;
+          color: #000000;
+        }
+      }
+      /deep/.el-table--border:after,
+      .el-table--group:after,
+      .el-table:before {
+        background-color: rgba(208, 218, 228, 1);
+      }
+      /deep/.el-table--border,
+      .el-table--group {
+        border-color: rgba(208, 218, 228, 1);
+      }
+      /deep/.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+        background: #f8fcff !important;
       }
       /deep/.el-table {
-        .textClass {
-          font-weight: 700;
+        font-family: 'Microsoft YaHei' !important;
+        .ascending .sort-caret.ascending {
+          border-bottom-color: #000000;
+        }
+        .descending .sort-caret.descending {
+          border-top-color: #000000;
         }
         th.el-table__cell {
-          background: #f8f8f8;
-          color: #000;
+          background: #ebf5ff;
+          color: #000000;
+          padding: 2px 12px;
+          border-color: rgba(208, 218, 228, 1);
         }
         .el-table__body td.el-table__cell {
-          &:first-child {
-            background: #f8f8f8;
+          padding: 7px 12px;
+          color: #000000;
+          border-color: rgba(208, 218, 228, 1);
+        }
+        .el-table__footer-wrapper td.el-table__cell {
+          border-color: rgba(208, 218, 228, 1);
+          background: #ffffff;
+          .cell {
+            color: #000000;
           }
         }
-        .el-table__footer-wrapper {
-          td.el-table__cell {
-            &:first-child {
-              background: #f8f8f8;
-              font-weight: bold;
-            }
-            &:nth-child(n + 2) {
-              background: #ffffff;
-              font-weight: bold;
-            }
-          }
-        }
-      }
-
-      .tabel_title {
-        margin-top: 15px;
-        width: 100%;
-        height: 30px;
-        font-size: 16px;
-        color: #333333;
-      }
-      .lineEchart {
-        width: 100%;
-        height: 350px;
       }
     }
   }

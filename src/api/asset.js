@@ -13,11 +13,12 @@ export const queryAssetById = id =>
  * @param date 时间
  */
 export const queryReportsData = param =>
-  request.post(`/statisticalReport/queryDataList?ids=${param.id}&time=${param.date}`);
+  request.get(`/ElectricReport/statisticalReport?ids=${param.id}&date=${param.date}`);
+
 /**
  * 统计报表导出
  * @param id 资产ID
  * @param date 时间
  */
 export const exportReports = param =>
-  request.post(`/statisticalReport/exportExcel`, { ids: param.ids, time: param.time, decode: param.decode }, { responseType: 'blob' });
+  request.get(`/ElectricReport/exportReport?ids=${param.id}&date=${param.date}`, { responseType: 'blob' });
