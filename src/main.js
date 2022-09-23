@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 // 按需引入组件，引入方式见https://element.eleme.cn/#/zh-CN/component/quickstart#an-xu-yin-ru
-import { Input, Select, Option, Button, Avatar } from "element-ui";
+import { Input, Select, Option, Button, Avatar, Tooltip } from "element-ui";
 
 Vue.config.productionTip = false;
 Vue.use(Input);
@@ -9,6 +9,7 @@ Vue.use(Select);
 Vue.use(Option);
 Vue.use(Button);
 Vue.use(Avatar);
+Vue.use(Tooltip);
 
 // import * as appService from "@njsdata/app-sdk";
 
@@ -16,11 +17,15 @@ if (process.env.NODE_ENV !== "production") {
   // 添加 customConfig 进行测试
   let customConfig = {
     assetId: "54b18540-a396-41a6-9333-34ab04336df0",
+    menuId: "d7c51222-fc24-42d2-b793-ec974000c87d",
     title: "应用工具",
     moreTo: "http://baidu.com",
     menuTitle: "title",
     menuDesc: "desc",
     menuTo: "http",
+    menuTypeTitle: "title",
+    menuType: "type",
+    boxHeight: "300",
     themePic:'[{"themeId":"d8724186-78cf-4c23-abb6-e931974e2df4","image":"imgUrl"},{"themeId":"52250e971ce3482491f75a7ae01af824","image":"imgUrl"}]'
   };
 

@@ -1,7 +1,7 @@
 {
-  "id": "37944888-8db1-4942-8a9c-6725af6d3538",
+  "id": "ce22a979-30a6-419d-9ade-8adb1fd19d2a",
   "type": "app",
-  "main": "app.2408277e.js",
+  "main": "app.f6ed5281.js",
   "version": "2",
   "props": {
     "type": "customize",
@@ -12,12 +12,16 @@
     "css_script": [],
     "customconf": [
       "assetId",
+      "menuId",
       "title",
       "moreTo",
       "menuTitle",
       "menuDesc",
       "menuTo",
-      "themePic"
+      "menuTypeTitle",
+      "menuType",
+      "themePic",
+      "boxHeight"
     ]
   }
 }
