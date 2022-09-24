@@ -1,6 +1,6 @@
 # om-app-plugin-react-boilerplate
-
-使用 react 开发 onemind 应用插件的 boilerplate 工程
+## 组件预览
+![](./output/preview.png)
 
 ## 支持功能
 
