@@ -1,0 +1,14 @@
+{
+  "id": "3e6e85da-c1ee-474b-a31b-b739ea6a818a",
+  "type": "list-custom-btn",
+  "main": "main.297225a7.js",
+  "baseVersion": "V8R4C50SPC210",
+  "version": "2",
+  "props": {
+    "styleArr": "[\"title\",\"height\",\"key\", \"eventCenterConfig\"]",
+    "columnStyle": "{title:'自定义'}",
+    "componentAttributes": "{\"style\":[\"title\",\"height\"],\"data\":[\"key\"],\"interaction\":[\"eventCenterConfig\"]}",
+    "assetColumnList": "[{\"col_name\":\"自定义\",\"col_datatype\":0}]",
+    "supportBatch": true
+  }
+}
