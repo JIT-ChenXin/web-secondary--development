@@ -14,6 +14,9 @@ const Set = (props) => {
   const { treeState } = useTreeData({ configuration });
   const { Option } = Select;
 
+  const [domList, setDomList] = useState([]);
+  const [searchList, setSearchList] = useState({});
+
   useEffect(() => {
     try {
       let configuration = {};
@@ -23,6 +26,7 @@ const Set = (props) => {
           ))
         : (configuration = {});
       setConfiguration(configuration);
+      randerSearch();
     } catch (e) {
       console.error(e);
     }
@@ -65,89 +69,72 @@ const Set = (props) => {
     return tableData;
   };
 
+  // 渲染搜索条件
   const randerSearch = () => {
-    console.log("set---生成搜索条件");
-    let searchList = [
-      {
-        tag: "select",
-        tagName: "园区名称",
-        assetId: "d96aee4c-5d38-4292-acb2-f86322fe87b9",
-        showField: "",
-        saveField: "",
-      },
-      {
-        tag: "select",
-        tagName: "仪表种类",
-        assetId: "d96aee4c-5d38-4292-acb2-f86322fe87b9",
-        showField: "",
-        saveField: "",
-      },
-      {
-        tag: "number",
-        tagName: "仪表号",
-        assetId: "",
-        showField: "",
-        saveField: "",
-      },
-      {
-        tag: "text",
-        tagName: "仪表名称",
-        assetId: "",
-        showField: "",
-        saveField: "",
-      },
-    ];
+    if (props.configuration) {
+      let configSet = JSON.parse(props.configuration);
+      if (configSet.searchFieldList) {
+        let _searchList = JSON.parse(configSet.searchFieldList);
+        let _domList = [];
 
-    let _domList = [];
+        _searchList.length &&
+          _searchList.forEach((item, index) => {
+            // 动态生成搜索条件
+            if (item.tag === "select") {
+              if (item.assetId) {
+                queryAssetData(item.assetId).then((res) => {
+                  let resData = translatePlatformDataToJsonArray(res);
 
-    searchList.forEach((item, index) => {
-      if (item.tag === "text") {
-        _domList.push(
-          <Row align="middle">
-            <Col span={5}>{item.tagName}: </Col>
-            <Col span={19}>
-              <Input placeholder={`请输入${item.tagName}`} />
-            </Col>
-          </Row>
-        );
-      } else if (item.tag === "number") {
-        _domList.push(
-          <Row align="middle">
-            <Col span={5}>{item.tagName}: </Col>
-            <Col span={19}>
-              <InputNumber
-                min={0}
-                style={{ width: "100%" }}
-                placeholder={`请输入${item.tagName}`}
-              />
-            </Col>
-          </Row>
-        );
-      } else if (item.tag === "select") {
-        let resData = [];
-        // queryAssetData(item.assetId).then((res) => {
-        //   resData = translatePlatformDataToJsonArray(res);
-        //   console.log("resData", resData);
-        // });
-        _domList.push(
-          <Row align="middle">
-            <Col span={5}>{item.tagName}: </Col>
-            <Col span={19}>
-              <Select
-                style={{ width: "100%" }}
-                placeholder={`请输入${item.tagName}`}
-              >
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="Yiminghe">yiminghe</Option>
-              </Select>
-            </Col>
-          </Row>
-        );
+                  _domList.push(
+                    <Row align="middle">
+                      <Col span={5}>{item.tagName}: </Col>
+                      <Col span={19}>
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder={`请输入${item.tagName}`}
+                          allowClear
+                        >
+                          {resData.map((e, i) => {
+                            return (
+                              <Option key={index} value={e[item.saveField]}>
+                                {e[item.showField]}
+                              </Option>
+                            );
+                          })}
+                        </Select>
+                      </Col>
+                    </Row>
+                  );
+                });
+              }
+            } else if (item.tag === "text") {
+              _domList.push(
+                <Row align="middle">
+                  <Col span={5}>{item.tagName}: </Col>
+                  <Col span={19}>
+                    <Input placeholder={`请输入${item.tagName}`} />
+                  </Col>
+                </Row>
+              );
+            } else if (item.tag === "number") {
+              _domList.push(
+                <Row align="middle">
+                  <Col span={5}>{item.tagName}: </Col>
+                  <Col span={19}>
+                    <InputNumber
+                      min={0}
+                      style={{ width: "100%" }}
+                      placeholder={`请输入${item.tagName}`}
+                    />
+                  </Col>
+                </Row>
+              );
+            }
+          });
+
+        setDomList(_domList);
       }
-    });
-
-    return _domList;
+    }
   };
 
   return (
@@ -155,13 +142,14 @@ const Set = (props) => {
       <div className="tree-table-set">
         {/* 顶部组件 */}
         <Row gutter={[30, 15]} className="search_box">
-          {randerSearch().map((item, index) => {
-            return (
-              <Col span={6} key={index}>
-                {item}
-              </Col>
-            );
-          })}
+          {JSON.stringify(domList) !== "[]" &&
+            domList.map((item, index) => {
+              return (
+                <Col span={6} key={index}>
+                  {item}
+                </Col>
+              );
+            })}
         </Row>
         {/* 底部组件 */}
         <Row gutter={18}>
@@ -169,7 +157,7 @@ const Set = (props) => {
             <Tree configuration={configuration} treeData={treeState.treeData} />
           </Col>
           <Col span={19}>
-            <Table configuration={configuration} />
+            <Table configuration={configuration} searchList={searchList} />
           </Col>
         </Row>
       </div>

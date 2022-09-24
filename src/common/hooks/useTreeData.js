@@ -16,6 +16,7 @@ const useTreeData = ({ configuration }) => {
 
   const initTreeData = async () => {
     const id = configuration.treeAssetId;
+
     const {
       treeTitle = "",
       treeDataId = "",
@@ -23,6 +24,7 @@ const useTreeData = ({ configuration }) => {
       treeMultLayer = false,
       treeFilter = true,
     } = configuration;
+
     if (id && id !== "") {
       try {
         const params = {

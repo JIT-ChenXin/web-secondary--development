@@ -1,21 +1,21 @@
 // 组件可派发事件
-export const events = [];
-
-// 组件可接收事件
-export const actions = [
+export const events = [
   {
-    key: "filterData",
-    name: "过滤数据",
-    isSupportChild: false,
-    params: [
+    key: "checkData",
+    name: "勾选数据",
+    type: "IEvent",
+    payload: [
       {
-        key: "list",
-        name: "过滤条件",
+        name: "选中数据",
+        key: "selectRow",
         dataType: "objectArray",
       },
     ],
   },
 ];
+
+// 组件可接收事件
+export const actions = [];
 
 export default {
   actions,

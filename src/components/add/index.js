@@ -37,9 +37,14 @@ const Add = (props) => {
   const [configuration, setConfiguration] = useState({});
   const [visible, setVisible] = useState(false);
 
+  const [domList, setDomList] = useState([]);
+  const [searchList, setSearchList] = useState({});
+
   const { treeState, setList, setTreeExpand, setTreeSelect } = useTreeData({
     configuration,
   });
+
+  const [treeObj, setTreeObj] = useState("");
 
   const { showBtn = false, btnName = "按钮" } = configuration;
 
@@ -47,18 +52,27 @@ const Add = (props) => {
     try {
       const configuration = JSON.parse(propsConfiguration);
       setConfiguration(configuration);
+      randerSearch();
     } catch (error) {}
   }, []);
 
+  const [selectData, setSelectData] = useState([]);
+
   //逻辑控制
-  const triggerEventCenter = async ({ payload, event }) => {
-    await eventCenter.triggerEventNew({
+  const triggerEventCenter = async (targetEvent, targetValue) => {
+    let triggerObj = {
       objectId: formConfig?.id,
       componentId: component?.id,
       type: "report",
-      event: event,
-      payload: payload,
-    });
+      event: targetEvent,
+      payload: {
+        value: targetValue,
+      },
+    };
+
+    console.log("eventNew传参-------->", triggerObj);
+
+    await eventCenter.triggerEventNew(triggerObj);
   };
 
   const do_EventCenter_filterData = ({ list = [] }) => {
@@ -93,7 +107,12 @@ const Add = (props) => {
     setTreeExpand(expandedKeys);
   };
 
-  const handleTreeSelect = (selectedKeys) => {
+  const handleTreeSelect = (selectedKeys, info) => {
+    if (selectedKeys.length) {
+      setTreeObj({ key: selectedKeys, label: info.node.title });
+    } else {
+      setTreeObj({});
+    }
     setTreeSelect(selectedKeys);
   };
 
@@ -107,7 +126,16 @@ const Add = (props) => {
   };
 
   const saveModal = () => {
+    triggerEventCenter("checkData", selectData);
     setVisible(false);
+  };
+
+  // 保存选中行数据
+  const saveSelectData = (arr) => {
+    if (!showBtn) {
+      triggerEventCenter("checkData", arr);
+    }
+    setSelectData(arr);
   };
 
   // 数据转换
@@ -129,90 +157,99 @@ const Add = (props) => {
     return tableData;
   };
 
+  // 触发搜索
+  const changeSearch = (field, value, tag) => {
+    let searchObj = {};
+    // 判断精准查询还是模糊查询
+    if (tag == "text" || tag == "number") {
+      searchObj.type = 0;
+    } else {
+      searchObj.type = 1;
+    }
+    searchObj.colName = field;
+    searchObj.value = value;
+
+    setSearchList(searchObj);
+  };
+
+  // 渲染搜索条件
   const randerSearch = () => {
-    console.log("add---生成搜索条件");
+    if (props.configuration) {
+      let configSet = JSON.parse(props.configuration);
+      if (configSet.searchFieldList) {
+        let _searchList = JSON.parse(configSet.searchFieldList);
+        let _domList = [];
 
-    let searchList = [
-      {
-        tag: "select",
-        tagName: "园区名称",
-        assetId: "d96aee4c-5d38-4292-acb2-f86322fe87b9",
-        showField: "",
-        saveField: "",
-      },
-      {
-        tag: "select",
-        tagName: "仪表种类",
-        assetId: "d96aee4c-5d38-4292-acb2-f86322fe87b9",
-        showField: "",
-        saveField: "",
-      },
-      {
-        tag: "number",
-        tagName: "仪表号",
-        assetId: "",
-        showField: "",
-        saveField: "",
-      },
-      {
-        tag: "text",
-        tagName: "仪表名称",
-        assetId: "",
-        showField: "",
-        saveField: "",
-      },
-    ];
+        _searchList.length &&
+          _searchList.forEach((item, index) => {
+            // 动态生成搜索条件
+            if (item.tag === "select") {
+              if (item.assetId) {
+                queryAssetData(item.assetId).then((res) => {
+                  let resData = translatePlatformDataToJsonArray(res);
+                  _domList.push(
+                    <Row align="middle">
+                      <Col span={5}>{item.tagName}: </Col>
+                      <Col span={19}>
+                        <Select
+                          style={{ width: "100%" }}
+                          placeholder={`请输入${item.tagName}`}
+                          onChange={(e) =>
+                            changeSearch(item.saveField, e, item.tag)
+                          }
+                          allowClear
+                        >
+                          {resData.map((e, i) => {
+                            return (
+                              <Option key={index} value={e[item.saveField]}>
+                                {e[item.showField]}
+                              </Option>
+                            );
+                          })}
+                        </Select>
+                      </Col>
+                    </Row>
+                  );
+                });
+              }
+            } else if (item.tag === "text") {
+              _domList.push(
+                <Row align="middle">
+                  <Col span={5}>{item.tagName}: </Col>
+                  <Col span={19}>
+                    <Input
+                      placeholder={`请输入${item.tagName}`}
+                      onBlur={(e) =>
+                        changeSearch(item.saveField, e.target.value, item.tag)
+                      }
+                    />
+                  </Col>
+                </Row>
+              );
+            } else if (item.tag === "number") {
+              _domList.push(
+                <Row align="middle">
+                  <Col span={5}>{item.tagName}: </Col>
+                  <Col span={19}>
+                    <InputNumber
+                      min={0}
+                      style={{ width: "100%" }}
+                      placeholder={`请输入${item.tagName}`}
+                      onBlur={(e) =>
+                        changeSearch(item.saveField, e.target.value, item.tag)
+                      }
+                    />
+                  </Col>
+                </Row>
+              );
+            }
+          });
 
-    let _domList = [];
-
-    searchList.forEach((item, index) => {
-      if (item.tag === "text") {
-        _domList.push(
-          <Row align="middle">
-            <Col span={5}>{item.tagName}: </Col>
-            <Col span={19}>
-              <Input placeholder={`请输入${item.tagName}`} />
-            </Col>
-          </Row>
-        );
-      } else if (item.tag === "number") {
-        _domList.push(
-          <Row align="middle">
-            <Col span={5}>{item.tagName}: </Col>
-            <Col span={19}>
-              <InputNumber
-                min={0}
-                style={{ width: "100%" }}
-                placeholder={`请输入${item.tagName}`}
-              />
-            </Col>
-          </Row>
-        );
-      } else if (item.tag === "select") {
-        let resData = [];
-        // queryAssetData(item.assetId).then((res) => {
-        //   resData = translatePlatformDataToJsonArray(res);
-        //   console.log("resData", resData);
-        // });
-        _domList.push(
-          <Row align="middle">
-            <Col span={5}>{item.tagName}: </Col>
-            <Col span={19}>
-              <Select
-                style={{ width: "100%" }}
-                placeholder={`请输入${item.tagName}`}
-              >
-                <Option value="jack">Jack</Option>
-                <Option value="lucy">Lucy</Option>
-                <Option value="Yiminghe">yiminghe</Option>
-              </Select>
-            </Col>
-          </Row>
-        );
+        setTimeout(() => {
+          setDomList(_domList);
+        }, 1000);
       }
-    });
-
-    return _domList;
+    }
   };
 
   const contentRender = () => {
@@ -221,13 +258,14 @@ const Add = (props) => {
         <div className="tree-table-add">
           {/* 顶部组件 */}
           <Row gutter={[30, 15]} className="search_box">
-            {randerSearch().map((item, index) => {
-              return (
-                <Col span={6} key={index}>
-                  {item}
-                </Col>
-              );
-            })}
+            {JSON.stringify(domList) !== "[]" &&
+              domList.map((item, index) => {
+                return (
+                  <Col span={6} key={index}>
+                    {item}
+                  </Col>
+                );
+              })}
           </Row>
           <Row gutter={18}>
             <Col span={5}>
@@ -241,13 +279,23 @@ const Add = (props) => {
               />
             </Col>
             <Col span={19}>
-              <Table configuration={configuration} />
+              <Table
+                configuration={configuration}
+                searchList={searchList}
+                treeObj={treeObj}
+                saveSelectData={saveSelectData}
+                modalVisible={visible}
+                formConfig={formConfig}
+                component={component}
+                eventCenter={eventCenter}
+              />
             </Col>
           </Row>
         </div>
       </ConfigProvider>
     );
   };
+
   if (showBtn) {
     return (
       <>

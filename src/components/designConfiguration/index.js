@@ -60,6 +60,8 @@ const DesignConfiguration = (props) => {
       treeFilter = true,
       tableAssetId = "",
       tableShowField = "",
+      searchFieldList = "",
+      treeSearchField = "",
       tableIsCheckBox = "",
       rightShowField = "",
       rightAllSum = "",
@@ -198,6 +200,28 @@ const DesignConfiguration = (props) => {
           </Col>
         </Row>
         <Row>
+          <Col span={12}>搜索条件</Col>
+          <Col span={12}>
+            <Input
+              value={searchFieldList}
+              onChange={(e) => {
+                onValueChange("searchFieldList", e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>目录过滤列表字段</Col>
+          <Col span={12}>
+            <Input
+              value={treeSearchField}
+              onChange={(e) => {
+                onValueChange("treeSearchField", e.target.value);
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
           <Col span={12}>是否多选</Col>
           <Col span={12}>
             <Switch
@@ -209,11 +233,10 @@ const DesignConfiguration = (props) => {
           </Col>
         </Row>
         <Row>
-          <Col span={12}>搜索条件</Col>
-          <Col span={12}></Col>
+          <Col span={12}>右侧配置</Col>
         </Row>
         <Row>
-          <Col span={12}>右边显示字段</Col>
+          <Col span={12}>显示字段</Col>
           <Col span={12}>
             <Input
               value={rightShowField}
@@ -235,7 +258,7 @@ const DesignConfiguration = (props) => {
           </Col>
         </Row>
         <Row>
-          <Col span={12}>是否展示右边</Col>
+          <Col span={12}>是否展示右侧</Col>
           <Col span={12}>
             <Switch
               checked={rightShow}
