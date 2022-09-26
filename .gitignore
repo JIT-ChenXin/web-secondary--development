@@ -17,10 +17,9 @@ pluginTemp/js/*
 pluginTemp/libs/*
 plugin-*.zip
 
-dumi
 
-.history
 # Editor directories and files
+.umi
 .idea
 .vscode
 *.suo
