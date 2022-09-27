@@ -1,0 +1,354 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.set_modal .wisdomOptions {
+  min-width: 40px;
+  font-size: 12px;
+  padding: 4px 0;
+  border: 1px solid #e4e4e4;
+  background-color: transparent;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.set_modal .fieldOptions .wisdomOptions {
+  min-width: 40px;
+  font-size: 12px;
+  padding: 4px 0;
+  border: none;
+  margin-right: 30px;
+  margin-top: 10px;
+  background-color: transparent;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.set_modal .ant-modal-header {
+  /* text-align: center; */
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 14px 14px 0 0;
+  background-color: #f5f5f5;
+  border-bottom: none;
+}
+
+.set_modal .ant-modal-header .ant-modal-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.set_modal .ant-modal-footer {
+  text-align: center;
+}
+
+.set_modal .ant-modal-body {
+  padding: 0;
+}
+
+.set_modal .ant-modal-body .ant-form-item-control-input-content textarea.ant-input {
+  border: none;
+
+  background-color: #f5f5f5;
+}
+
+.set_modal .deaflutOptions {
+  /* display: flex;
+  justify-content: space-around; */
+  padding-left: 30px;
+}
+
+.set_modal .ant-modal-body .set_content {
+  padding: 10px 0;
+  max-height: 450px;
+
+}
+
+.set_modal .ant-modal-body .set_content .set_sorll {
+  overflow-y: auto;
+  position: relative;
+
+  height: 348px;
+}
+
+
+.set_modal .ant-modal-body .set_content .set_sorll .numberOptions {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  top: 162px;
+}
+
+.set_modal .ant-modal-body .set_content .set_sorll .numberOptions .wisdomOptions {}
+
+.set_modal .ant-modal-body .set_content .set_sorll::-webkit-scrollbar {
+  /* 对应纵向滚动条的宽度 */
+  width: 5px;
+  /* 对应横向滚动条的宽度 */
+  height: 10px;
+}
+
+/* 滚动条上的滚动滑块 */
+.set_modal .ant-modal-body .set_content .set_sorll::-webkit-scrollbar-thumb {
+  background-color: #e0eaf1;
+  border-radius: 32px;
+}
+
+/* 滚动条轨道 */
+.set_modal .ant-modal-body .set_content::-webkit-scrollbar-track {
+  background-color: #fff;
+  border-radius: 32px;
+}
+
+
+.set_modal .ant-modal-body .set_content .deaflutOptions .wisdomOptions {
+  width: 70px;
+  height: 70px;
+  /* font-size: 34px; */
+  margin-right: 30px;
+  border: none;
+  color: #0649c1;
+  background-color: #eef8ff;
+
+  border-radius: 50%;
+}
+
+.set_modal .ant-modal-body .set_content .numberOptions {
+  padding-left: 30px;
+  padding-top: 6px;
+}
+
+.set_modal .ant-modal-body .set_content .numberOptions .wisdomOptions {
+  width: 70px;
+  height: 70px;
+  font-size: 20px;
+  margin-right: 30px;
+  border: 1px solid #e4e4e4;
+  margin-top: 10px;
+  /* color: #0649c1; */
+  /* background-color: #eef8ff; */
+
+  border-radius: 50%;
+}
+
+.set_modal .ant-modal-body .set_content .coefficientOptions {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #e4e4e4;
+  font-size: 16px;
+  white-space: nowrap;
+  margin-right: 30px;
+  margin-top: 10px;
+  background-color: transparent;
+  /*默认normal自动换行，nowrap是强制不换行*/
+  overflow: hidden;
+  /*溢出部分隐藏*/
+  text-overflow: ellipsis;
+  /*溢出部分用省略号显示，ellipsis就是省略号的意思*/
+  cursor: pointer;
+  /* font-size: 34px; */
+  border-radius: 50%;
+}
+
+.set_modal .ant-modal-body .set_content .coeffHover {
+
+  border: 1px solid #0454F2;
+  font-size: 16px;
+  color: rgb(255, 255, 255);
+  background-color: #0454F2;
+
+}
+
+
+.set_modal .ant-modal-body .set_content .deaflutOptions .wisdomOptions div {
+  font-size: 32px;
+}
+
+.set_modal .ant-modal-body .twoOptions {
+  /* display: flex; */
+  /* justify-content: space-around; */
+}
+
+.set_modal .ant-modal-body .fieldOptions {
+  /* width: 350px; */
+  padding-left: 30px;
+  /* display: flex; */
+  /* justify-content: space-around; */
+  /* flex-wrap: wrap; */
+
+}
+
+.set_modal .ant-modal-body .fieldOptions .wisdomOptions {
+  width: 70px;
+  height: 70px;
+
+  border: 1px solid #e4e4e4;
+  font-size: 16px;
+  white-space: nowrap;
+  background-color: transparent;
+  /*默认normal自动换行，nowrap是强制不换行*/
+  overflow: hidden;
+  /*溢出部分隐藏*/
+  text-overflow: ellipsis;
+  /*溢出部分用省略号显示，ellipsis就是省略号的意思*/
+
+  /* font-size: 34px; */
+  border-radius: 50%;
+}
+
+
+
+
+
+.set_modal .ant-modal-body .fieldOptions .wisdomOptions button {
+  width: 70px;
+  height: 70px;
+  margin-right: 10px;
+  border: 1px solid #e4e4e4;
+  font-size: 16px;
+  white-space: nowrap;
+  background-color: transparent;
+  /*默认normal自动换行，nowrap是强制不换行*/
+  overflow: hidden;
+  /*溢出部分隐藏*/
+  text-overflow: ellipsis;
+  /*溢出部分用省略号显示，ellipsis就是省略号的意思*/
+
+  /* font-size: 34px; */
+  border-radius: 50%;
+}
+
+.set_modal .ant-modal-body .fieldOptions .wisdom {
+  width: 70px;
+  height: 70px;
+  margin-right: 30px;
+  /* border: 1px solid #e4e4e4; */
+  font-size: 16px;
+  /* margin-top: 6px; */
+  white-space: nowrap;
+  background-color: transparent;
+  /*默认normal自动换行，nowrap是强制不换行*/
+  overflow: hidden;
+  /*溢出部分隐藏*/
+  text-overflow: ellipsis;
+  /*溢出部分用省略号显示，ellipsis就是省略号的意思*/
+  vertical-align: middle;
+  /* font-size: 34px; */
+  border-radius: 50%;
+}
+
+.set_modal .ant-modal-body .fieldOptions .wisdom button {
+  width: 70px;
+  height: 70px;
+
+  margin-right: 10px;
+  border: 1px solid #e4e4e4;
+  font-size: 16px;
+  white-space: nowrap;
+  background-color: transparent;
+  /*默认normal自动换行，nowrap是强制不换行*/
+  overflow: hidden;
+  padding: 0;
+  /*溢出部分隐藏*/
+  text-overflow: ellipsis;
+  /*溢出部分用省略号显示，ellipsis就是省略号的意思*/
+
+  /* font-size: 34px; */
+  border-radius: 50%;
+}
+
+.set_modal .ant-modal-body .twoOptions .deaflutOptions {
+  /* width: 90px; */
+
+  /* width: 100px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* flex: 1; */
+}
+
+.set_modal .ant-modal-body .twoOptions .deaflutOptions .wisdomOptions {
+  margin-top: 23px;
+}
+
+.set_modal .set_footer {
+  padding: 0 30px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.set_modal .set_footer .wisdomOptions {
+  width: 70px;
+  height: 70px;
+  border: none;
+  font-size: 20px;
+  color: #0649c1;
+  background-color: #eef8ff;
+  border-radius: 50%;
+}
+
+.set_modal .screen_text {
+  height: 115px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-direction: column;
+  font-size: 26px;
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
+.set_modal .set_footer .ant-btn-primary {
+  width: 140px;
+  height: 54px;
+  border-radius: 13px;
+  background-color: #0454f1;
+  font-size: 20px;
+}
+
+.set_modal .ant-modal-close-x .anticon {
+  background-color: #cacbd1;
+  padding: 5px;
+  border-radius: 4px;
+  color: #171e30;
+}
+
+.set_modal .ant-modal-content {
+  border-radius: 14px;
+}
+
+/* .set_modal .ant-modal-body .twoOptions .deaflutOptions .wisdomOptions {
+  margin: 20px;
+} */
+
+/* 
+.zhihui_form .ant-select-tree-switcher {
+
+  position: relative;
+
+}
+
+.zhihui_form .ant-select-tree-switcher_open::before,
+.ant-select-tree-switcher_close::before {
+
+  content: '';
+
+  position: absolute;
+
+  right: -310px;
+
+  top: 0;
+
+  left: 0;
+
+  bottom: 0;
+
+} */
