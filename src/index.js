@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== "production") {
   require("antd/dist/antd.css");
   // 添加 customConfig 进行测试
   let customConfig = {
-    资产ID: "10898d59-55ba-431b-84f7-efbf6beaa351",
+    资产ID: "3272eded-d72e-46ef-9acd-eecb2236bd4d",
     时间字段: "time",
     任务字段: "task",
     标题: "日程",

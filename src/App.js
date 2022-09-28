@@ -47,7 +47,15 @@ const App = (props) => {
   // 初始加载
   useEffect(() => {
     let assetID = props.customConfig["资产ID"];
-    queryAssetById(assetID).then((res) => {
+
+    let queryForm = {
+      column: props.customConfig["权限字段"],
+      datatype: 0,
+      type: 10,
+      compareObj: window.currentUser.account_code,
+    };
+
+    queryAssetById(assetID, [queryForm]).then((res) => {
       let resData = translatePlatformDataToJsonArray(res);
       let dataList = JSON.parse(JSON.stringify(resData));
       let _todayData = [];
@@ -125,8 +133,8 @@ const App = (props) => {
 
   // 切换日期
   const onDateChange = (value) => {
-    getCalendarData(value.format("YYYY/MM/DD"));
-    setTodayDate(value.format("YYYY/MM/DD"));
+    getCalendarData(value.format("YYYY-MM-DD"));
+    setTodayDate(value.format("YYYY-MM-DD"));
   };
 
   // 跳转地址
