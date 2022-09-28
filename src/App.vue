@@ -115,23 +115,24 @@ export default {
           normal: {
 
             formatter: (params) => {
-              return '{name|' + params.name + ':} {value|' + this.formatNumber(params.value) + `${this.unit}}`;
+              return ' {value|' + this.formatNumber(params.value) + `${this.unit}}`;
             },
-            padding: [0, -120, 30, -120],
+            // padding: [0, -120, 30, -120],
             rich: {
 
-              name: {
-                fontSize: 14,
 
-                // padding: [4, 0, 0, 0],
-                color: '#fff',
-              },
               value: {
                 fontSize: 18,
                 fontWeight: 'bold',
                 color: '#fff',
                 align: 'left',
               },
+              unit: {
+                fontSize: 18,
+                fontWeight: 'bold',
+                color: '#fff',
+                align: 'left',
+              }
             },
           },
         },
@@ -145,7 +146,6 @@ export default {
           {
             text: '设备数',
             x: 'center',
-
             top: '40%',
             textStyle: {
               color: 'black',
@@ -160,8 +160,8 @@ export default {
             x: 'center',
             top: '46%',
             textStyle: {
-              fontSize: 90,
-              color: '#00f0ff',
+              fontSize: 34,
+              color: 'blue',
               foontWeight: '500',
             },
           },
@@ -171,19 +171,25 @@ export default {
             top: '55%',
             textStyle: {
               color: 'black',
-              fontSize: 34,
+              fontSize: 12,
               fontWeight: '100',
-
             },
           },
         ],
+        tooltip: {
+          show: true,
+          alwaysShowContent: true,
+          className: 'huanx', borderColor: 'transparent', backgroundColor: 'rgba(255,255,255,0.7)'
+        },
 
-
-
+        legend: {
+          show: true, textStyle: { fontFamily: '微软雅黑', fontSize: 18, color: '#000' },
+          top: 'bottom', icon: "circle", data: [], itemWidth: 15, itemHeight: 15, itemGap: 50
+        },
         series: [
           {
             type: 'pie',
-            radius: ['50%', '25%'],
+            radius: ['35%, 67%'],
 
             // radius: ['35%', '67%'],
             // center: ['50%', '50%'],
@@ -211,7 +217,7 @@ export default {
           },
           {
             type: 'pie',
-            radius: ['50%', '25%'],
+            radius: ['35%, 67%'],
 
             // radius: ['35%', '67%'],
             // center: ['50%', '50%'],
@@ -260,7 +266,7 @@ export default {
                 formatter: (params) => {
                   return '{name|' + params.name + ':} {value|' + this.formatNumber(params.value) + `${this.unit}}`;
                 },
-                padding: [0, -120, 30, -120],
+                padding: [0, 0, 0, -120],
                 rich: {
 
                   name: {
@@ -307,7 +313,8 @@ export default {
       let 数据标签字号 = this.options?.externalVariables?.数据标签字号
       let 数据标签颜色 = this.options?.externalVariables?.数据标签颜色
       let 数据标签字体 = this.options?.externalVariables?.数据标签字体
-      return { fontSize: 数据标签字号, color: 数据标签颜色, fontFamily: 数据标签字体 }
+      let 数据标签加粗 = this.options?.externalVariables?.数据标签加粗 == 'true' ? "900" : "100"
+      return { fontSize: 数据标签字号, color: 数据标签颜色, fontFamily: 数据标签字体, fontWeight: 数据标签加粗 }
     },
     titleStyle() {
       let 图标中间文字颜色上 = this.options?.externalVariables?.图标中间文字颜色上 || 'black'
@@ -327,7 +334,7 @@ export default {
     },
     ringStyle() {
       let 环内百分比字号 = this.options?.externalVariables?.环内百分比字号
-      let 环内百分比颜色 = this.options?.externalVariables?.环内百分比颜色
+      let 环内百分比颜色 = this.options?.externalVariables?.环内百分比颜色 || '#fff'
       let 环内百分比字体 = this.options?.externalVariables?.环内百分比字体
       return { fontSize: 环内百分比字号, color: 环内百分比颜色, fontFamily: 环内百分比字体 }
     },
@@ -350,6 +357,7 @@ export default {
       }
     },
     radius() {
+      // let 饼图的半径 = this.options?.externalVariables?.饼图的半径 || '50%, 25%'
       let 饼图的半径 = this.options?.externalVariables?.饼图的半径 || '35%, 67%'
 
       return 饼图的半径.split(',')
@@ -366,135 +374,185 @@ export default {
         console.log(error);
       }
       return 渐变色
-    }
+    },
+    legendOptions() {
+      let size = this.options?.externalVariables?.图例大小 || 15
+      let fontSize = this.options?.externalVariables?.图例字体大小
+      let itemgap = this.options?.externalVariables?.图例间距 || 20
+      return { size: Number(size), fontSize, itemgap: Number(itemgap) }
+    },
+    tooltipOptions() {
+      let fontIcon = this.options?.externalVariables?.提示框图例大小
+      let fontTitle = this.options?.externalVariables?.提示框标题大小
+      let fontValue = this.options?.externalVariables?.提示框值大小
+      return { fontIcon, fontTitle, fontValue }
+    },
 
   },
   created() {
     this.unit = this.options?.externalVariables?.单位 || '万'
     let tableD = JSON.parse(JSON.stringify(this.dataSource))
+    console.log(this.dataSource, '====');
+    if (this.dataSource && this.dataSource?.length > 0) {
+      tableD.shift()
+      let tableD1 = this.dataFn(tableD)
 
-    tableD.shift()
-    let tableD1 = this.dataFn(tableD)
 
-    let a = []
-    for (let x = 0; x < tableD1[0].length; x++) {
-      let temp = []
-      tableD1.forEach(item => {
-        temp.push(item[x])
-      })
-      a.push(temp)
-    }
+      let a = []
+      for (let x = 0; x < tableD1[0].length; x++) {
+        let temp = []
+        tableD1.forEach(item => {
+          temp.push(item[x])
+        })
+        a.push(temp)
+      }
 
-    let scaleData = [];
-    let sum = 0
+      let scaleData = [];
+      let sum = 0
 
-    if (this.gradient) {
-      a[0].forEach((x, i) => {
+      if (this.gradient) {
+        a[0].forEach((x, i) => {
+          let colorArr = this.gradient[i] || ['', '']
+
+          colorArr[1] = colorArr[1] ? colorArr[1] : colorArr[0]
+          let color
+          if (colorArr[0]) {
+            color = new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+              {
+                offset: 0,
+                color: colorArr[0],
+              },
+              {
+                offset: 1,
+                color: colorArr[1],
+              },
+            ])
+
+          } else {
+            color = null
+          }
+          sum += Number(x)
+          scaleData.push({
+            value: x,
+            name: a[1][i],
+            itemStyle: {
+              color
+            }
+          })
+        })
+      } else {
+        a[0].forEach((x, i) => {
+          let color = this.dataColor[i] || null
+          sum += Number(x)
+          scaleData.push({
+            value: x,
+            name: a[1][i],
+            itemStyle: { color }
+          })
+        })
+      }
+      tableD1.forEach((x, i) => {
         let colorArr = this.gradient[i] || ['', '']
+        this.optionsE.legend.data.push({ name: x[1], itemStyle: { color: colorArr[0] || this.dataColor[i] || null } })
+      })
 
-        colorArr[1] = colorArr[1] ? colorArr[1] : colorArr[0]
-        let color
-        if (colorArr[0]) {
-          color = new echarts.graphic.LinearGradient(0, 0, 1, 1, [
-            {
-              offset: 0,
-              color: colorArr[0],
-            },
-            {
-              offset: 1,
-              color: colorArr[1],
-            },
-          ])
+      let accuracy = this.accuracy
+      let sumT = String(sum).indexOf('.') == -1 ? sum : sum.toFixed(2)
+      this.optionsE.title[1].text = sumT
+      this.optionsE.title[0].text = this.titleText.titleT
+      this.optionsE.title[2].text = this.titleText.titleB
 
-        } else {
-          color = null
-        }
-        sum += Number(x)
-        scaleData.push({
-          value: x,
-          name: a[1][i],
-          itemStyle: {
-            color
+      let that = this
+      scaleData.forEach((x, i) => {
+        let temD = JSON.parse(JSON.stringify(scaleData))
+        let itemInner = JSON.parse(JSON.stringify(this.itemInner))
+        let itemOut = JSON.parse(JSON.stringify(this.itemOut))
+        scaleData.forEach((y, idx) => {
+
+          if (i != idx) {
+            temD[idx].itemStyle.color = 'transparent'
+            temD[idx].itemStyle.borderColor = 'transparent'
+            temD[idx].itemStyle.optionColor = y.itemStyle?.color?.colorStops[0]?.color || y.itemStyle?.color
           }
         })
-      })
-    } else {
-      a[0].forEach((x, i) => {
-        let color = this.dataColor[i] || null
-        sum += Number(x)
-        scaleData.push({
-          value: x,
-          name: a[1][i],
-          itemStyle: { color }
-        })
-      })
-    }
-    let accuracy = this.accuracy
-    let sumT = String(sum).indexOf('.') == -1 ? sum : sum.toFixed(2)
-    this.optionsE.title[1].text = sumT
-    this.optionsE.title[0].text = this.titleText.titleT
-    this.optionsE.title[2].text = this.titleText.titleB
 
-    let that = this
-    scaleData.forEach((x, i) => {
-      let temD = JSON.parse(JSON.stringify(scaleData))
-      let itemInner = JSON.parse(JSON.stringify(this.itemInner))
-      let itemOut = JSON.parse(JSON.stringify(this.itemOut))
-      scaleData.forEach((x, idx) => {
-        if (i != idx) {
-          temD[idx].itemStyle.color = 'transparent'
-          temD[idx].itemStyle.borderColor = 'transparent'
+        itemInner.data = temD
+        itemOut.data = temD
+
+        itemOut.label.normal.formatter = (params) => {
+          return ' {value|' + that.formatNumber(params.value) + `}` + `{unit| ${that.unit} }`;
         }
+        let towR = Number(that.radius[1].replace('%', ''))
+        itemInner.radius = [that.radius[0], towR + i * 5 + '%']
+        itemOut.radius = [that.radius[0], towR + i * 5 + '%']
+        itemInner.itemStyle.normal.borderWidth = that.spacing
+        itemOut.itemStyle.normal.borderWidth = that.spacing
+        itemInner.label.rich.d = that.ringStyle
+        itemInner.zlevel = 1
+        itemOut.label.normal.show = false
+        itemOut.labelLine.show = false
+        let unitStyle = JSON.parse(JSON.stringify(that.dataLabel))
+        delete unitStyle.fontWeight
+        itemOut.label.normal.rich.unit = unitStyle
+        itemOut.label.normal.rich.value = that.dataLabel
+        itemOut.labelLine.normal.length = that.lineStyle.length
+        itemOut.labelLine.normal.length2 = that.lineStyle.length2
+        itemOut.labelLine.normal.minTurnAngle = that.lineStyle.minTurnAngle
+        itemOut.labelLine.normal.lineStyle.color = that.lineStyle.color
+        this.optionsE.series[i * 2] = itemInner
+        this.optionsE.series[i * 2 + 1] = itemOut
       })
+      let cd = this.optionsE.series.length - 1
+      this.optionsE.series[cd].label.normal.show = true
+      this.optionsE.series[cd - 1].label.show = false
+      this.optionsE.series[cd - 1].data.forEach((x, i) => {
 
-      itemInner.data = temD
-      itemOut.data = temD
-      itemOut.label.normal.formatter = (params) => {
-        return '{name|' + params.name + ':} {value|' + that.formatNumber(params.value) + `${that.unit}}`;
+        x.itemStyle.color != 'transparent' ? x.label = { show: true } : null
+
+      })
+      this.optionsE.series[cd].labelLine.show = true
+      this.optionsE.series[cd].zlevel = -1
+      this.optionsE.series[0].label.formatter = function (name) {
+
+
+        const p = ((name.value / sum) * 100).toFixed(accuracy);
+        return `{d| ${p}%} `
       }
-      let towR = Number(that.radius[1].replace('%', ''))
-      itemInner.radius = [that.radius[0], towR + i * 5 + '%']
-      itemOut.radius = [that.radius[0], towR + i * 5 + '%']
-      itemInner.itemStyle.normal.borderWidth = that.spacing
-      itemOut.itemStyle.normal.borderWidth = that.spacing
-      itemInner.label.rich.d = that.ringStyle
-      itemInner.zlevel = 1
-      itemOut.label.normal.show = false
-      itemOut.labelLine.show = false
-      itemOut.label.normal.rich.name = that.dataLabel
-      itemOut.label.normal.rich.value = that.dataLabel
-      itemOut.labelLine.normal.length = that.lineStyle.length
-      itemOut.labelLine.normal.length2 = that.lineStyle.length2
-      itemOut.labelLine.normal.minTurnAngle = that.lineStyle.minTurnAngle
-      itemOut.labelLine.normal.lineStyle.color = that.lineStyle.color
-      this.optionsE.series[i * 2] = itemInner
-      this.optionsE.series[i * 2 + 1] = itemOut
-    })
-    let cd = this.optionsE.series.length - 1
-    this.optionsE.series[cd].label.normal.show = true
-    this.optionsE.series[cd - 1].label.show = false
-    this.optionsE.series[cd - 1].data.forEach((x, i) => {
+      // this.optionsE.series[0].data = scaleData
+      // this.optionsE.series[1].data = scaleData
+      // this.optionsE.series[0].itemStyle.normal.borderWidth = this.spacing
+      // this.optionsE.series[1].itemStyle.normal.borderWidth = this.spacing
+      let unit = this.unit
+      this.optionsE.legend.textStyle.fontSize = this.legendOptions.fontSize
+      this.optionsE.legend.itemWidth = this.legendOptions.size
+      this.optionsE.legend.itemHeight = this.legendOptions.size
+      this.optionsE.legend.itemGap = this.legendOptions.itemgap
 
-      x.itemStyle.color != 'transparent' ? x.label = { show: true } : null
+      let font = this.tooltipOptions
+      this.optionsE.tooltip.formatter = function (params) {
 
-    })
-    this.optionsE.series[cd].labelLine.show = true
-    this.optionsE.series[cd].zlevel = -1
-    this.optionsE.series[0].label.formatter = function (name) {
+        let color1 = params.data.itemStyle?.optionColor || params.color?.colorStops[0]?.color
+        let res = `<div  class= 'pin' style=' color:${color1};font-size:${font.fontIcon}'>●&nbsp </div>` + `<span  class="textTile" style='font-size:${font.fontTitle}' >` + params.name + "</span>" + "<br>" +
+          `<div  class='flex' style='font-size:${font.fontValue}'   >` + `<div>` + params?.value + ` </div>` + `<div  class='end' >` + unit + `</div>` + `</div>` + `</div>`
 
 
-      const p = ((name.value / sum) * 100).toFixed(accuracy);
-      console.log(p);
-      return `{d| ${p}%} `
+
+          // `<div  class= 'pin' style=' color:${color1};'>●&nbsp </div>` +
+          // "自发自用电量: " +
+          // params[0].data +
+
+
+
+
+          ;
+
+        return '<div class="showBox"    >' + res + "</div>";
+      }
+      this.optionsE.title.forEach((x, i) => {
+        x.textStyle = this.titleStyle[i]
+      })
     }
-    // this.optionsE.series[0].data = scaleData
-    // this.optionsE.series[1].data = scaleData
-    // this.optionsE.series[0].itemStyle.normal.borderWidth = this.spacing
-    // this.optionsE.series[1].itemStyle.normal.borderWidth = this.spacing
 
-    this.optionsE.title.forEach((x, i) => {
-      x.textStyle = this.titleStyle[i]
-    })
 
   },
 
@@ -502,8 +560,10 @@ export default {
     this.$refs.rock_div.parentNode.style.height = "100%"
     this.$refs.rock_div.parentNode.style.width = "100%"
     this.$refs.rock_div.parentNode.parentNode.style.minHeight = "0"
+    if (this.dataSource && this.dataSource?.length > 0) {
+      this.initFn();
+    }
 
-    this.initFn();
     const events = [
       {
         key: "onClick",
@@ -542,7 +602,7 @@ export default {
   },
   methods: {
     initFn() {
-      let Gechart = echarts.init(this.$refs.rockEcharts);
+      let Gechart = echarts.init(this.$refs.rockEcharts, null, { devicePixelRatio: 1, renderer: 'svg' });
 
       Gechart.setOption(this.optionsE);
       this.optionsE && Gechart.setOption(this.optionsE);
@@ -554,8 +614,6 @@ export default {
     dataFn(arr) {
       let a = {}
       let b = []
-
-
       arr.forEach(x => {
         let key = x[0]
         if (a[key] >= 0) {
@@ -603,6 +661,7 @@ export default {
 <style lang="less" scoped>
 .rockEcharts {
   height: 100%;
+
 
 }
 </style>
