@@ -17,8 +17,6 @@ const List = (props) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // const [dataSource, setDataSource] = useState([]);
-
   const [modelid, setModelid] = useState("");
 
   const [isUpload, setIsUpload] = useState(false);
@@ -28,52 +26,21 @@ const List = (props) => {
   }, []);
 
   const handleClick = () => {
-    // let resDataList = [];
-
-    // props.dataSource &&
-    //   props.dataSource.forEach((item, index) => {
-    //     if (item.length) {
-    //       let obj = {};
-    //       item.forEach((e, i) => {
-    //         obj.componentId = e.componentId;
-    //         obj.value = e.componentId;
-    //         obj.sort = e.i;
-    //       });
-    //       resDataList.push(obj);
-    //     }
-    //   });
-
-    // if (resDataList.length) {
-    //   setDataSource(resDataList);
-    // }
-
-    let search = qs.parse(window.location.search);
-    let menuId = "";
-
-    if (search.menuId) {
-      if (search.menuId.indexOf("#") != -1) {
-        menuId = search.menuId.slice(0, search.menuId.indexOf("#"));
-      } else {
-        menuId = search.menuId;
-      }
-    }
-
-    getMoudleId({ id: menuId, opt_type: "view" }).then((res) => {
-      if (res.data.datapp_page_web_mappings.length) {
-        setModelid(res.data.datapp_page_web_mappings[0].object_id);
-      }
-    });
+    setModelid(props?.allParams?.stateParams?.allConfigValues?.modelId);
 
     setIsModalOpen(true);
   };
 
   const handleCancel = () => {
+    if (isUpload) {
+      props.handleSearch();
+    }
     setIsModalOpen(false);
   };
 
   const handleOk = () => {
     if (isUpload) {
-      window.location.reload();
+      props.handleSearch();
     }
     setIsModalOpen(false);
   };
@@ -84,7 +51,6 @@ const List = (props) => {
     name: "file",
     maxCount: 1,
     multiple: false,
-    // data: { importExcelParam: JSON.stringify(dataSource) },
     headers: {
       "X-XSRF-TOKEN": Cookies.get("XSRF-TOKEN"),
     },

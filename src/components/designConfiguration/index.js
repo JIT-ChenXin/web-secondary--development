@@ -23,10 +23,10 @@ const DesignConfiguration = ({ changeConfiguration, configuration }) => {
   return (
     <>
       <Form {...formItemLayout} form={form} onValuesChange={onFormLayoutChange}>
-        <Form.Item label="资产一" name="assetID_1">
+        <Form.Item label="单元表资产ID" name="assetID_1">
           <Input />
         </Form.Item>
-        <Form.Item label="资产二" name="assetID_2">
+        <Form.Item label="公摊表资产ID" name="assetID_2">
           <Input />
         </Form.Item>
       </Form>
