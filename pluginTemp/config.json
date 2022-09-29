@@ -1,0 +1,17 @@
+{
+  "id": "34080ed7-f186-45a2-a101-76d1e90ed501",
+  "type": "app",
+  "main": "main.32230fad.js",
+  "version": "2",
+  "props": {
+    "type": "customize",
+    "img": "APP_0001.png",
+    "name": "dsadq",
+    "loadStyle": 0,
+    "lib": [],
+    "css_script": [],
+    "customconf": [
+      "JSON脚本"
+    ]
+  }
+}
