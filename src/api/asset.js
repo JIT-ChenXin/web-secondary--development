@@ -1,13 +1,14 @@
 import request from "./request";
 
 /**
- * 查询资产
- * @param id 资产ID
+ * 查询资产(新的)
+ * @param {*} params
  */
-export const queryAssetById = (id) => request.post(`/asset/getAssetData?asset_id=${id}`, []);
+export const getAllData = (params) =>
+  request.post(`panNeng/queryByCollectorId `, params);
 
 /**
- * 查询用户信息接口
- * 
+ * 查询资产
  */
-export const user = () => request.get(`/system/authority/user`);
+export const update = (id) =>
+  request.get("panNeng/fullUpdate");

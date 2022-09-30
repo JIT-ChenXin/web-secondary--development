@@ -1,18 +1,19 @@
 {
-  "id": "d23b9398-d70c-4471-b2d1-c193fd9515c4",
-  "type": "navigation",
-  "main": "main.8c475c7e.js",
+  "id": "48c6467f-489e-4fb3-a903-72225f9587a8",
+  "type": "app",
+  "main": "main.95173b23.js",
   "version": "2",
   "props": {
     "type": "navigation",
     "img": "APP_0001.png",
-    "name": "dsadq",
+    "name": "dsadq-1",
     "loadStyle": 0,
     "lib": [],
     "css_script": [],
     "customconf": [
-      "appId",
-      "dataSouce"
+      "首页名称",
+      "隐藏菜单id",
+      "隐藏展开菜单id"
     ]
   }
 }
