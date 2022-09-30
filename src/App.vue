@@ -1,26 +1,40 @@
 <template>
-  <div class="menu_list" :style="{ height: boxHeight + 'px' }">
+  <div :id="id" :ref="id" class="menu_list" :style="{ height: boxHeight + 'px' }">
     <div class="top_box">
       <div class="menu_title">{{ title }}</div>
-      <div class="menu_more" :style="{ color: pinPaiColor }" @click="lineHerf()">更多</div>
+      <div class="menu_more" :style="{ color: pinPaiTextColor }" @click="lineHerf()">更多</div>
     </div>
     <div ref="typeBox" class="type_box">
-      <div ref="dragBox" class="drag_box" @mousedown="dragx($event)">
+      <!-- <div ref="dragBox" class="drag_box" @mousedown="dragx($event)">
+        <div v-for="(x, y) in menuTypeList" :key="y" class="type_title" :style="{ background: menuActive == y ? pinPaiColor : '#fff', color: menuActive == y ? '#fff' : '#6e6e6e' }" @click="typeBtn(x, y)">{{ x[menuTypeTitle] }}</div>
+      </div> -->
+      <div ref="dragBox" class="drag_box">
         <div v-for="(x, y) in menuTypeList" :key="y" class="type_title" :style="{ background: menuActive == y ? pinPaiColor : '#fff', color: menuActive == y ? '#fff' : '#6e6e6e' }" @click="typeBtn(x, y)">{{ x[menuTypeTitle] }}</div>
       </div>
     </div>
-    <div class="list_box">
-      <div class="for_box" v-for="(item, i) in menuList" :key="i">
-        <el-tooltip class="item" effect="light" :content="item[menuDesc]" placement="bottom">
-          <div class="menu_litm" :class="{ activeItem: active == i }" :style="{ borderWidth: active == i ? '2px' : '0px', borderStyle: 'solid', borderColor: pinPaiColor }" @click="setActive(i, item)">
-            <!-- <img :src="item[imgSrc]" class="menu_img" alt="" /> -->
-            <img :src="JSON.parse(item[imgSrc])[0].url" class="menu_img" alt="" />
-            <div class="right_box">
-              <span class="name" :style="{ color: active == i ? pinPaiColor : '#2a2b2d' }">{{ item[menuTitle] }}</span>
-              <!-- <div class="desc">{{ item[menuDesc] }}</div> -->
+    <div class="bottomBox">
+      <div class="leftArrow">
+        <div v-if="pageNum > 1" class="arrowBox" @click="arrowHande('-')">
+        <!-- <div class="arrowBox" @click="arrowHande('-')"> -->
+          <i class="el-icon-arrow-left"></i>
+        </div>
+      </div>
+      <div class="list_box">
+        <div class="for_box" v-for="(item, i) in menuList" :key="i">
+          <el-tooltip class="item" effect="light" :content="item[menuDesc]" placement="bottom">
+            <!--  :class="{ activeItem: active == i }" :style="{ background: active == i ? pinPaiColor : 'rgba(255, 255, 255, 0.8)'}" -->
+            <div class="menuLitm" @click="setActive(i, item)">
+              <img :src="JSON.parse(item[imgSrc])[0].url" class="menu_img" alt="" />
+              <span class="name">{{ item[menuTitle] }}</span>
             </div>
-          </div>
-        </el-tooltip>
+          </el-tooltip>
+        </div>
+      </div>
+      <div class="rightArrow">
+        <div v-if="menuListCopy.length > (pageNum * 4)" class="arrowBox" @click="arrowHande('+')">
+        <!-- <div class="arrowBox" @click="arrowHande('+')"> -->
+          <i class="el-icon-arrow-right"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -30,7 +44,7 @@
 // import appService from "@njsdata/app-sdk";
 import eventActionDefine from './components/msgCompConfig'
 import './index.css'
-import { getAssetById } from './api/asset'
+import { getAssetById, queryAssetById } from './api/asset'
 export default {
   name: 'App',
   props: {
@@ -39,10 +53,12 @@ export default {
   },
   data() {
     return {
+      id: "erbasMenu930",
+      styleEle: null,
       title: '',
       assetId: '',
       menuId: '',
-      active: 0,
+      active: -1,
       menuActive: 0,
       menuTitle: '',
       menuDesc: '',
@@ -51,25 +67,43 @@ export default {
       lineTo: '',
       menuTo: '',
       menuList: [],
+      menuListCopy: [],
       menuTypeList: [],
       menuTypeTitle: '',
       menuType: '',
       menuTypeVal: '',
       menuListAll: [],
       boxHeight: '',
+      filterWords: "",
+      userRole: "",
+      rowNum: 1,
+      pageNum: 1
     }
   },
   computed: {
-    // title() {
-    //   return this.customConfig?.title || "数据构建";
-    // },
     pinPaiColor() {
-      let { theme_global_config } = this.themeInfo || { theme_global_config: { '--theme-public-pinPai-color': 'rgba(24,144,255,1)' } }
+      let { theme_global_config } = this.themeInfo || { theme_global_config: { '--theme-public-pinPai-color': 'rgba(24,144,255,0.8)' } }
       let themeColor = theme_global_config['--theme-public-pinPai-color']
+      return themeColor
+    },
+    pinPaiTextColor() {
+      let { theme_global_config } = this.themeInfo || { theme_global_config: { '--theme-public-pinPai-color': 'rgba(24,144,255,0.8)' } }
+      let themeColor = theme_global_config["--theme-public-text-color-1"]
       return themeColor
     },
   },
   mounted() {
+    // 滚动轴【鼠标】横向滚动
+    let tabsContainer = document.querySelector(".drag_box");
+    tabsContainer.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      console.log(event.deltaY);
+      if (event.deltaY >= 0) {
+        tabsContainer.scrollLeft += (event.deltaY + 20);
+      } else {
+        tabsContainer.scrollLeft += (event.deltaY - 20);
+      }
+    });
     this.assetId = this.customConfig?.assetId
     this.menuId = this.customConfig?.menuId
     this.title = this.customConfig?.title
@@ -81,14 +115,25 @@ export default {
     this.menuTypeTitle = this.customConfig?.menuTypeTitle
     this.menuType = this.customConfig?.menuType
     this.boxHeight = this.customConfig?.boxHeight
+    this.filterWords = this.customConfig?.filterWords
+    this.rowNum = parseInt(this.customConfig?.rowNum)
+    this.userRole = window.currentUser?.id ? window.currentUser?.id : "1234567890"
     this.getData()
-    // this.$nextTick((x) => {
-    //   window.addEventListener('keyup', this.handleKeyup)
-    // })
+    this.$nextTick(() => {
+      this.appendStyle()
+    })
     let { componentId } = this.customConfig || {}
     componentId && window.componentCenter?.register(componentId, 'comp', this, eventActionDefine)
   },
   methods: {
+    appendStyle() {
+      let style = `#${this.id} .menuLitm:hover{color:${this.pinPaiTextColor} !important;background:${this.pinPaiColor} !important;}`;
+      if (this.$refs[this.id]) {
+        this.styleEle = document.createElement("style");
+        document.head.appendChild(this.styleEle);
+        this.styleEle.innerText = style;
+      }
+    },
     async getData() {
       let { theme_id } = this.themeInfo
       this.imgSrc = ''
@@ -97,7 +142,14 @@ export default {
           this.imgSrc = y.image
         }
       })
-      let { data } = await getAssetById(this.assetId)
+      const params = {
+        column: this.filterWords,
+        compareObj: this.userRole,
+        datatype: 0,
+        type: 10
+      }
+      let { data } = await queryAssetById(this.assetId,params)
+      // let { data } = await getAssetById(this.assetId)
       let key = data[0]
       let value = data[1]
       this.menuListAll = value.map((val) => {
@@ -107,6 +159,7 @@ export default {
         })
         return obj
       })
+      // console.log('this.menuListAll',this.menuListAll);
       this.getMenuData()
     },
     async getMenuData() {
@@ -163,14 +216,18 @@ export default {
       window.open(item[this.menuTo])
     },
     typeBtn(item, i) {
-      // console.log('item', item)
       this.menuActive = i
       this.menuTypeVal = item[this.menuType]
-      this.menuList = this.menuListAll.filter((x) => {
+      let menuListCopys = []
+      this.pageNum = 1
+      let startIndex = 0
+      let endIndex =  this.pageNum * 4
+      menuListCopys = this.menuListAll.filter((x) => {
         return x[this.menuType] == this.menuTypeVal
       })
+      this.menuListCopy = JSON.parse(JSON.stringify(menuListCopys));
+      this.menuList = menuListCopys.splice(startIndex,endIndex)
       console.log('this.menuList', this.menuList)
-      // console.log('this.menuListAll', this.menuListAll)
     },
     triggerEvent() {
       let { componentId, appId } = this.customConfig || {}
@@ -185,6 +242,20 @@ export default {
             value: '',
           },
         })
+    },
+    arrowHande(size) {
+      if (size === '-') {
+        this.pageNum = this.pageNum - 1
+        if (this.pageNum == 0) {
+          this.pageNum = 1
+          return
+        }
+      } else {
+        this.pageNum = this.pageNum + 1
+      }
+      let startIndex = (this.pageNum - 1) * (this.rowNum * 4)
+      let endIndex =  this.pageNum * (this.rowNum * 4)
+      this.menuList = this.menuListCopy.slice(startIndex,endIndex)
     },
     do_EventCenter_messageSuccess() {
       alert('动作执行成功！')
@@ -205,46 +276,45 @@ export default {
 // }
 .menu_list {
   padding: 15px 0 15px 15px;
-  width: calc(100% - 15px);
+  width: 545px;
   background: #f1f2f7;
   border-radius: 4px;
-  min-height: 180px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  box-sizing: border-box;
   .top_box {
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     .menu_title {
-      font-size: 15px;
+      font-size: 16px;
       color: #333;
       font-weight: 600;
     }
     .menu_more {
       margin-right: 15px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
     }
   }
   .type_box {
-    position: relative;
     margin-top: 15px;
-    margin-right: 15px;
     height: 30px;
-    overflow: auto;
-    overflow-y: hidden;
+    width: calc(100% - 15px);
     display: flex;
-    border-radius: 4px;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    justify-content: center;
+    // overflow: hidden;
     .drag_box {
-      position: absolute;
-      left: 0px;
       display: flex;
       flex-wrap: nowrap;
       height: 30px;
+      overflow: auto;
+      overflow-y: hidden;
+      border-radius: 4px;
+      box-shadow: 0 0 6px #dadbe1;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       .type_title {
         cursor: pointer;
         display: inline-block;
@@ -255,63 +325,89 @@ export default {
         padding: 5px 0;
         font-size: 14px;
         border-right: 1px solid #e7e7e7;
+        &:last-child {
+          border-right: none;
+        }
       }
     }
   }
-  .list_box {
-    user-select: none;
+  .bottomBox {
     display: flex;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    width: 100%;
-    .for_box {
-      width: calc(33.3% - 15px);
-      margin-top: 10px;
+    align-items: center;
+    flex: 1;
+    .leftArrow,.rightArrow {
+      user-select: none;
       margin-right: 15px;
-      display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
-      cursor: pointer;
-
-      .menu_litm {
+      height: 50px;
+      width: 20px;
+      .arrowBox {
+        height: 50px;
+        width: 20px;
         display: flex;
-        flex-direction: column;
         align-items: center;
         justify-content: center;
-        // padding: 10px;
-        background: #f7f8fc;
-        border-radius: 4px;
-        height: 110px;
-        width: 100%;
-        box-sizing: border-box;
-        .menu_img {
-          // margin-right: 10px;
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-        }
-        .right_box {
-          // height: 44px;
-          // width: calc(100% - 80px);
-          margin-top: 10px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          .name {
-            font-size: 16px;
-            font-weight: 600;
-          }
-          // .desc {
-          //   font-size: 12px;
-          //   width: 100%;
-          //   overflow: hidden;
-          //   text-overflow: ellipsis;
-          //   white-space: nowrap;
-          // }
+        font-size: 14px;
+        color: #ffffff;
+        background: #9e9c9f;
+        opacity: 0;
+        &:hover {
+          opacity: 1;
         }
       }
-      .activeItem {
-        background: #ffffff;
+    }
+    .list_box {
+      user-select: none;
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      padding-bottom: 13px;
+      padding-top: 8px;
+      .for_box {
+        width: 100px;
+        height: 104px;
+        margin-top: 8px;
+        margin-right: 15px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+  
+        .menuLitm {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          background: inherit;
+          color: #2a2b2d;
+          .menu_img {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            min-height: 40px;
+            border-radius: 50%;
+          }
+          .name {
+            margin-top: 8px;
+            font-family: 'PingFang SC';
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            // height: 20px;
+            // line-height: 20px;
+            width: 80%;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            text-align: center;
+          }
+        }
       }
     }
   }

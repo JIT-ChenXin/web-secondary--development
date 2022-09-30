@@ -16,27 +16,29 @@ Vue.use(Tooltip);
 if (process.env.NODE_ENV !== "production") {
   // 添加 customConfig 进行测试
   let customConfig = {
-    assetId: "54b18540-a396-41a6-9333-34ab04336df0",
+    assetId: "3115d8fb-c11e-927f-bbe2-442969a56d1d",//xjg_application_store_often
     menuId: "d7c51222-fc24-42d2-b793-ec974000c87d",
     title: "应用工具",
     moreTo: "http://baidu.com",
-    menuTitle: "title",
+    menuTitle: "name",
     menuDesc: "desc",
-    menuTo: "http",
+    menuTo: "url",
     menuTypeTitle: "title",
-    menuType: "type",
-    boxHeight: "300",
-    themePic:'[{"themeId":"d8724186-78cf-4c23-abb6-e931974e2df4","image":"imgUrl"},{"themeId":"52250e971ce3482491f75a7ae01af824","image":"imgUrl"}]'
+    menuType: "menuType",
+    boxHeight: "",
+    filterWords: "user_id",
+    rowNum: "1",
+    themePic:'[{"themeId":"d8724186-78cf-4c23-abb6-e931974e2df4","image":"photo"},{"themeId":"52250e971ce3482491f75a7ae01af824","image":"photo"}]'
   };
 
   let themeInfo = {
       "theme_id": "52250e971ce3482491f75a7ae01af824",
       "theme_global_config": {
-          "--theme-public-pinPai-color": "rgba(24,144,255,1)",
+          "--theme-public-pinPai-color": "rgba(24,144,255,0.6)",
           "--theme-public-sub-color-1": "rgba(37, 55, 97,1)",
           "--theme-public-sub-color-2": "rgba(30, 41, 64,1)",
           "--theme-public-sub-color-3": "rgba(115, 141, 192,1)",
-          "--theme-public-text-color-1": "rgba(12, 13, 14,1)",
+          "--theme-public-text-color-1": "rgba(24,144,255,1)",
           "--theme-public-text-color-2": "rgba(85, 85, 85,1)",
           "--theme-public-text-color-3": "rgba(204, 204, 204,1)",
           "--theme-public-text-color-4": "rgba(245, 245, 245,1)",

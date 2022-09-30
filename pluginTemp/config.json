@@ -1,7 +1,7 @@
 {
   "id": "ce22a979-30a6-419d-9ade-8adb1fd19d2a",
   "type": "app",
-  "main": "app.f6ed5281.js",
+  "main": "app.1d120842.js",
   "version": "2",
   "props": {
     "type": "customize",
@@ -21,7 +21,9 @@
       "menuTypeTitle",
       "menuType",
       "themePic",
-      "boxHeight"
+      "boxHeight",
+      "filterWords",
+      "rowNum"
     ]
   }
 }
