@@ -1,0 +1,17 @@
+{
+  "id": "7bde7710-6c42-4b57-81b9-cffa49835c2f",
+  "type": "app",
+  "main": "app.1452c404.js",
+  "version": "2",
+  "props": {
+    "type": "customize",
+    "img": "APP_0001.png",
+    "name": "应用二开_vue",
+    "loadStyle": 0,
+    "lib": [],
+    "css_script": [],
+    "customconf": [
+      "jumpWay"
+    ]
+  }
+}
