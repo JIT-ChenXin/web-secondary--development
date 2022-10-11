@@ -5,11 +5,11 @@
       <div class="menuTitle" :style="{color: theme.textColor}">常用应用</div>
       <div class="menuContent">
         <!-- <div class="nextPage"></div> -->
-        <draggable class="menuDrag" ghostClass="ghost" chosenClass="chosen" :scroll="true" v-model="cyMenuList" forceFallback="false" group="people" animation="300" @start="onStart" @end="onEnd">
+        <draggable class="menuDrag" handle=".mover" filter=".forbid" ghostClass="ghost" chosenClass="chosen" :scroll="true" v-model="cyMenuList" :forceFallback="false" group="people" animation="300" @start="onStart" @end="onEnd">
           <transition-group class="menuDragGroup">
-            <div v-for="item,index in cyMenuList" :key="item.data_id" class="cyBox">
+            <div v-for="item,index in cyMenuList" :key="item.data_id" class="mover cyBox">
               <el-tooltip :key="item.desc ? item.desc : ''" effect="light" :content="item.name" placement="bottom">
-                <div class="cyItem" :style="{borderColor: theme.themeColor }" @click="lineTo(item)">
+                <div class="cyItem" :style="{borderColor: theme.themeColor }" @click.stop="lineTo(item)">
                   <img src="../pluginTemp/images/图片1.png" class="cyVector" alt="" @click.stop="cancelCy(item.data_id)">
                   <img :src="JSON.parse(item.photo)[0].url" class="menu_img" alt=""/>
                   <span class="menu_name">{{ item.name }}</span>
@@ -47,7 +47,9 @@
               <span class="menu_name">{{ item.name }}</span>
             </div>
             <div v-if="item.auth == false" class="bottomCyItem" :style="{borderColor: theme.themeColor }">
-              <img :src="JSON.parse(item.no_access_photo)[0].url" class="menu_img" alt="" />
+              <div class="menu_img">
+                <img v-if="item.no_access_photo" :src="JSON.parse(item.no_access_photo)[0].url" class="menu_imgIs" alt="" />
+              </div>
               <span class="menu_name">{{ item.name }}</span>
             </div>
           </el-tooltip>
@@ -79,7 +81,6 @@ Vue.use(Input)
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Tooltip)
-
 export default {
   //这里写组件英文名称，容器dom的id及事件中心命名均用到这个name，请认真填写
   name: "munu",
@@ -123,7 +124,13 @@ export default {
       allMenu: [], //  全部菜单
       nowMenuList: [], // 当先显示菜单
       cyMenuList: [], // 常用菜单
-      MenuTypeList: [] // 菜单分类
+      MenuTypeList: [], // 菜单分类
+    }
+  },
+  created() {
+    document.body.ondrop = function (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
   },
   mounted() {
@@ -160,7 +167,7 @@ export default {
       this.cyMenuList = []
       let { data } = await getMenu()
       let {dataList,sorts} = data
-      let sortList = JSON.parse(sorts[0].sorts)
+      let sortList = sorts[0] ? JSON.parse(sorts[0].sorts) : []
       for (let index = 0; index < sortList.length; index++) {
         for (let current = 0; current < dataList.length; current++) {
           if (dataList[current].data_id == sortList[index]) {
@@ -172,11 +179,10 @@ export default {
       dataList.forEach(x=>{
         this.cyMenuList.push(x)
       })
-      // console.log('this.cyMenuList=',this.cyMenuList);
+      console.log('this.cyMenuList=',this.cyMenuList);
     },
     // 取消常用
     async cancelCy(id) {
-      // return
       let res = await cancelMenuCy(id)
       console.log('取消常用',res);
       await this.getchangYong() // 常用菜单数据
@@ -188,6 +194,7 @@ export default {
       let sorts = this.cyMenuList.map(x=>{
         return x.data_id
       })
+      // sorts = JSON.stringify(sorts)
       let res = await refreshSorts(sorts)
       console.log('刷新排序',res);
       this.getchangYong() // 常用菜单数据
@@ -367,6 +374,7 @@ export default {
                 display: none;
               }
               .menu_img {
+                user-select: none;
                 margin-bottom: 8px;
                 width: 40px;
                 height: 40px;
@@ -552,10 +560,18 @@ export default {
             display: none;
           }
           .menu_img {
+            user-select: none;
             margin-bottom: 8px;
             width: 40px;
             height: 40px;
             border-radius: 50%;
+            overflow: hidden;
+
+            .menu_imgIs {
+              width: 100%;
+              height: 100%;
+              border-radius: 50%;
+            }
           }
           .menu_name {
             font-family: 'PingFang SC';
