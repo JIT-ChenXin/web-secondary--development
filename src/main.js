@@ -1,12 +1,18 @@
 import Vue from "vue";
 import App from "./App.vue";
-import { Input, Select, Option } from "element-ui";
+import { Input, Select, Option, Tooltip, Form, FormItem, RadioGroup, Radio, Button } from "element-ui";
 import "./index.css";
 
 Vue.config.productionTip = false;
 Vue.use(Input);
 Vue.use(Select);
 Vue.use(Option);
+Vue.use(Tooltip);
+Vue.use(Form);
+Vue.use(FormItem);
+Vue.use(RadioGroup);
+Vue.use(Radio);
+Vue.use(Button);
 
 if (process.env.NODE_ENV !== "production") {
   const props = {
@@ -40,20 +46,38 @@ if (process.env.NODE_ENV !== "production") {
         shape: "nodeDom",
         data: {
           basicattrs: {
-            classname: "com.sdata.YZKJOperatorNode",
+            classname: "com.sdata.LzApiOperatorNode",
           },
           detail: {
             apiSrc: "https://www.baudi.com",
-            columns: [
+            method: "美团接口",
+            inColumns: [
               {
                 displayed: 1,
-                col_index: 1,
+                col_index: 0,
                 asset_id: "2fd81d3f-6993-0e78-c308-0b06ed7836a8",
                 col_name: "书名",
                 col_datatype: 0,
                 import_flag: false,
               },
             ],
+            selectedColumns: [
+              {
+                col_index: 0,
+                col_name: "书名",
+                col_datatype: "0",
+              },
+            ],
+            outputs: [
+              {
+                index: 0,
+                name: "书名",
+                datatype: "0",
+                col_index: 0,
+                col_name: "书名",
+                col_datatype: "0",
+              },
+            ]
           },
           text: {
             internalName: "",
