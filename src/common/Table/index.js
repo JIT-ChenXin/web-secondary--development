@@ -90,7 +90,8 @@ const TableContainer = (props) => {
       if (treeData.key) {
         if (configuration.treeSearchField) {
           queryFormData.jsonObject.filterFiled = configuration.treeSearchField;
-          queryFormData.jsonObject.filedValue = treeData.label;
+          // queryFormData.jsonObject.filedValue = treeData.label;
+          queryFormData.jsonObject.filedValue = treeData.key[0];
         }
       } else {
         queryFormData.jsonObject.filterFiled = "";

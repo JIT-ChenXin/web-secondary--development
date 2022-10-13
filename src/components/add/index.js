@@ -59,18 +59,16 @@ const Add = (props) => {
   const [selectData, setSelectData] = useState([]);
 
   //逻辑控制
-  const triggerEventCenter = async (targetEvent, targetValue) => {
+  const triggerEventCenter = async (targetValue) => {
     let triggerObj = {
       objectId: formConfig?.id,
       componentId: component?.id,
       type: "report",
-      event: targetEvent,
+      event: "change",
       payload: {
         value: targetValue,
       },
     };
-
-    console.log("eventNew传参-------->", triggerObj);
 
     await eventCenter.triggerEventNew(triggerObj);
   };
@@ -126,14 +124,14 @@ const Add = (props) => {
   };
 
   const saveModal = () => {
-    triggerEventCenter("checkData", selectData);
+    triggerEventCenter(selectData);
     setVisible(false);
   };
 
   // 保存选中行数据
   const saveSelectData = (arr) => {
     if (!showBtn) {
-      triggerEventCenter("checkData", arr);
+      triggerEventCenter(arr);
     }
     setSelectData(arr);
   };
@@ -187,10 +185,11 @@ const Add = (props) => {
               if (item.assetId) {
                 queryAssetData(item.assetId).then((res) => {
                   let resData = translatePlatformDataToJsonArray(res);
-                  _domList.push(
+
+                  _domList[item.index] = (
                     <Row align="middle">
-                      <Col span={5}>{item.tagName}: </Col>
-                      <Col span={19}>
+                      <Col span={6}>{item.tagName}: </Col>
+                      <Col span={18}>
                         <Select
                           style={{ width: "100%" }}
                           placeholder={`请输入${item.tagName}`}
@@ -213,10 +212,10 @@ const Add = (props) => {
                 });
               }
             } else if (item.tag === "text") {
-              _domList.push(
+              _domList[item.index] = (
                 <Row align="middle">
-                  <Col span={5}>{item.tagName}: </Col>
-                  <Col span={19}>
+                  <Col span={6}>{item.tagName}: </Col>
+                  <Col span={18}>
                     <Input
                       placeholder={`请输入${item.tagName}`}
                       onBlur={(e) =>
@@ -227,10 +226,10 @@ const Add = (props) => {
                 </Row>
               );
             } else if (item.tag === "number") {
-              _domList.push(
+              _domList[item.index] = (
                 <Row align="middle">
-                  <Col span={5}>{item.tagName}: </Col>
-                  <Col span={19}>
+                  <Col span={6}>{item.tagName}: </Col>
+                  <Col span={18}>
                     <InputNumber
                       min={0}
                       style={{ width: "100%" }}
@@ -257,7 +256,7 @@ const Add = (props) => {
       <ConfigProvider locale={zhCN}>
         <div className="tree-table-add">
           {/* 顶部组件 */}
-          <Row gutter={[30, 15]} className="search_box">
+          <Row gutter={[25, 15]} className="search_box">
             {JSON.stringify(domList) !== "[]" &&
               domList.map((item, index) => {
                 return (
