@@ -11,8 +11,6 @@ const TableContainer = (props) => {
 
   // 右侧求和字段
   const allSums = configuration.rightAllSum ? configuration.rightAllSum : "";
-  // 右侧是否显示
-  const rightShow = configuration.rightShow ? configuration.rightShow : false;
   // 右侧显示字段
   const changeKey = configuration.rightShowField
     ? configuration.rightShowField
@@ -29,8 +27,8 @@ const TableContainer = (props) => {
     pageSize: 10,
   });
   // 表格选中数据
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [tableSelectedRow, setTableSelectedRow] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   // 表格查询条件
   const [queryForm, setQueryForm] = useState({
     queryCondition: {
@@ -128,20 +126,93 @@ const TableContainer = (props) => {
 
   // 选中行数据
   const rowSelection = {
+    // 一键清除所需参数
     selectedRowKeys,
-    onChange: (row) => {
-      setSelectedRowKeys(row);
-      let tableSelectedRows = [];
-      for (let index = 0; index < row.length; index++) {
-        for (let nums = 0; nums < tableData.length; nums++) {
-          if (tableData[nums].data_id === row[index]) {
-            tableSelectedRows.push(tableData[nums]);
+    // 选中/取消选中
+    onSelect: (row, type) => {
+      let rowList = JSON.parse(JSON.stringify(tableSelectedRow));
+      let rowKeyList = JSON.parse(JSON.stringify(selectedRowKeys));
+
+      if (type) {
+        // 处理行数据
+        rowList.push(row);
+        setTableSelectedRow(rowList);
+        // 处理Key数据
+        rowKeyList.push(row.data_id);
+        setSelectedRowKeys(rowKeyList);
+      } else {
+        // 行数据
+        rowList.forEach((item, index) => {
+          if (item.data_id == row.data_id) {
+            rowList.splice(index, 1);
           }
-        }
+        });
+        setTableSelectedRow(rowList);
+        // key数据
+        rowKeyList.forEach((item, index) => {
+          if (item == row.data_id) {
+            rowKeyList.splice(index, 1);
+          }
+        });
+        setSelectedRowKeys(rowKeyList);
       }
 
-      props.saveSelectData(tableSelectedRows);
-      setTableSelectedRow(tableSelectedRows);
+      props.saveSelectData(rowList);
+    },
+    // 全选/取消全选
+    onSelectAll: (type, selectedRows, changeRows) => {
+      let rowList = JSON.parse(JSON.stringify(tableSelectedRow));
+      let rowKeyList = JSON.parse(JSON.stringify(selectedRowKeys));
+      if (type) {
+        // 处理行数据
+        selectedRows.forEach((item, index) => {
+          if (item) {
+            rowList.push(item);
+          }
+        });
+        // 数据数组去重
+        for (let i = 0; i < rowList.length; i++) {
+          for (let j = i + 1; j < rowList.length; j++) {
+            if (rowList[i].data_id == rowList[j].data_id) {
+              rowList.splice(j, 1);
+              j--;
+            }
+          }
+        }
+        setTableSelectedRow(rowList);
+        // 处理Key数据
+        selectedRows.forEach((item, index) => {
+          if (item) {
+            rowKeyList.push(item.data_id);
+          }
+        });
+        setSelectedRowKeys([...new Set(rowKeyList)]);
+      } else {
+        // 处理行数据
+        for (let i = 0; i < rowList.length; i++) {
+          changeRows.forEach((e) => {
+            if (rowList[i]) {
+              if (rowList[i].data_id == e.data_id) {
+                rowList.splice(i, 1);
+                i--;
+              }
+            }
+          });
+        }
+        setTableSelectedRow(rowList);
+        // 处理key数据
+        for (let i = 0; i < rowKeyList.length; i++) {
+          changeRows.forEach((e) => {
+            if (rowKeyList[i] == e.data_id) {
+              rowKeyList.splice(i, 1);
+              i--;
+            }
+          });
+        }
+        setSelectedRowKeys(rowKeyList);
+      }
+
+      props.saveSelectData(rowList);
     },
   };
 
