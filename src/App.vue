@@ -208,7 +208,14 @@ export default {
     // 所有菜单
     async getAllMenuData(words) {
       let { data } = await getAllMenu(words)
-      this.allMenu = data
+      let dataList = data.filter(x=>{
+        return x.auth === false
+      })
+      this.allMenu = data.filter(x=>{
+        return x.auth === true
+      })
+      this.allMenu = this.allMenu.concat(dataList)
+      // console.log('this.allMenu',this.allMenu);
       this.changeMenuType({paneName: this.nowMenu})
     },
     // 设置常用
