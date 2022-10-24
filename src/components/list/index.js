@@ -11,6 +11,14 @@ import qs from "querystringify";
 
 import "./index.less";
 
+const openNotification = (title, message) => {
+  notification.open({
+    message: title,
+    description: message,
+    duration: null,
+  });
+};
+
 const List = (props) => {
   useEffect(() => {
     handleClick();
@@ -39,17 +47,27 @@ const List = (props) => {
                 // 获取正确跳转地址
                 getUrlId(dataForm)
                   .then((res) => {
-                    // 跳转页面
-                    window.location.href = props.customParams.jumpUrl + `&dataId=${res.data}`;
+                    // openNotification("接口正确参数", JSON.stringify(res));
+                    if (res.data == 1) {
+                      message.success("资产已完成盘点");
+                    } else if (res.data == 2) {
+                      message.success("资产已完成盘点，不用再次盘点");
+                    } else if (res.data == 3) {
+                      message.success("该资产已申报异常，不用再次盘点");
+                    } else if (res.data == 4) {
+                      message.success("不是您需要盘点的资产");
+                    }
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 1000);
                   })
                   .catch((err) => {
-                    return message.error("跳转失败");
+                    // openNotification("接口错误参数", JSON.stringify(err));
+                    message.error(err.data.message);
                   });
               } else {
-                return message.error("未获取到正确地址");
+                return message.error("未获取到dataId");
               }
-            } else {
-              return message.error("未获取到正确地址", JSON.stringify(result));
             }
           })
           .catch((err) => {
