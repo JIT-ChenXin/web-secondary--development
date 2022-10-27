@@ -47,7 +47,7 @@ const List = (props) => {
                 // 获取正确跳转地址
                 getUrlId(dataForm)
                   .then((res) => {
-                    // openNotification("接口正确参数", JSON.stringify(res));
+                    openNotification("接口正确参数", JSON.stringify(res));
                     if (res.data == 1) {
                       message.success("资产已完成盘点");
                     } else if (res.data == 2) {
@@ -56,13 +56,17 @@ const List = (props) => {
                       message.success("该资产已申报异常，不用再次盘点");
                     } else if (res.data == 4) {
                       message.success("不是您需要盘点的资产");
+                    } else if (res.data == 5) {
+                      message.success("请联系资产管理员确认");
+                    } else if (res.data == 6) {
+                      message.success("已完成盘点任务");
                     }
                     setTimeout(() => {
                       window.location.reload();
                     }, 1000);
                   })
                   .catch((err) => {
-                    // openNotification("接口错误参数", JSON.stringify(err));
+                    openNotification("接口错误参数", JSON.stringify(err));
                     message.error(err.data.message);
                   });
               } else {

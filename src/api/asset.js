@@ -4,4 +4,6 @@ export const getAssetJSONForProduct = (id) => request.get(`iot/product/getAssetJ
 
 export const downloadAssetJSONForProduct = (id) => request.get(`iot/product/downloadAssetJSONForProduct?productId=${id}`);
 
-export const getUrlId = (dataForm) => request.post("ScanEwm/ScanEwm", dataForm);
+// export const getUrlId = (dataForm) => request.post("ScanEwm/ScanEwm", dataForm);
+
+export const getUrlId = (dataForm) => request.post("ext/scanEwm", dataForm);
