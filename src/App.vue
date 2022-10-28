@@ -5,7 +5,7 @@
   }" ref="multistageTable">
     <div v-if="dataSource && tableDataHeader && tableData" class="multistage">
 
-      <el-table id="table" :data="tableData" style="width: 100%" border :span-method="arraySpanMethod">
+      <el-table id="table" :data="tableData" style="width: 100%" border>
         <el-table-column label="序号" align="center" type="index" class-name="ReachTable">
         </el-table-column>
         <el-table-column v-for="(item, index) in tHeader" align="center" :key="index"
@@ -262,36 +262,9 @@ export default {
 
       return tableReal
     },
-    clickBt() {
-      this.componentId &&
-        window.eventCenter?.triggerEvent &&
-        window.eventCenter.triggerEvent(this.componentId, "onClick", {
-          name: "二开插件",
-        });
-    },
-    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-
-      let i = this.tableData?.length - 1
-      // console.log(rowIndex == i, rowIndex, i);
-      if (rowIndex == i) {
-
-        if (columnIndex == 1) {
-          // console.log(row, column, rowIndex, columnIndex);
-
-
-
-
-        }
-      }
-
-    },
     // 逻辑控制用，不可删，return内容可改
     Event_Center_getName: () => {
       return "多级表头";
-    },
-    do_EventCenter_messageSuccess(param) {
-      console.log(param);
-      alert("动作执行成功！");
     },
   },
 };
