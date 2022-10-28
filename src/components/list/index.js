@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-import { message, notification } from "antd";
+import { message, notification, Modal } from "antd";
 
-import { getUrlId } from "../../api/asset";
+import { getUrlId, newScanEwm } from "../../api/asset";
 
 import dd from "gdt-jsapi";
 
@@ -28,7 +28,7 @@ const List = (props) => {
   const handleClick = () => {
     // 解析Url上的地址
     let _url = qs.parse(window.location.search);
-    if (_url[props.customParams.params]) {
+    if (_url[props?.customParams?.params]) {
       setTimeout(() => {
         dd.scan({ type: "qr" })
           .then((result) => {
@@ -47,26 +47,69 @@ const List = (props) => {
                 // 获取正确跳转地址
                 getUrlId(dataForm)
                   .then((res) => {
-                    openNotification("接口正确参数", JSON.stringify(res));
+                    //openNotification("接口正确参数", JSON.stringify(res));
                     if (res.data == 1) {
-                      message.success("资产已完成盘点");
+                      Modal.success({
+                        content: "资产已完成盘点",
+                        className: "list-custom-scan-success-modal",
+                      });
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 1000);
                     } else if (res.data == 2) {
-                      message.success("资产已完成盘点，不用再次盘点");
+                      Modal.success({
+                        content: "资产已完成盘点，不用再次盘点",
+                        className: "list-custom-scan-success-modal",
+                      });
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 1000);
                     } else if (res.data == 3) {
-                      message.success("该资产已申报异常，不用再次盘点");
+                      Modal.warning({
+                        content: "该资产已申报异常，不用再次盘点",
+                        className: "list-custom-scan-success-modal",
+                      });
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 1000);
                     } else if (res.data == 4) {
-                      message.success("不是您需要盘点的资产");
+                      Modal.warning({
+                        content: "不是您需要盘点的资产",
+                        className: "list-custom-scan-warning-modal",
+                        okText: "确认",
+                        onOk: () => {
+                          setTimeout(() => {
+                            window.location.reload();
+                          }, 1000);
+                        },
+                      });
                     } else if (res.data == 5) {
-                      message.success("请联系资产管理员确认");
+                      Modal.confirm({
+                        content: "请联系资产管理员确认",
+                        className: "list-custom-scan-confirm-modal",
+                        okText: "确认上报",
+                        cancelText: "取消",
+                        onOk: () => {
+                          handleSuccess(dataForm);
+                        },
+                        onCancel: () => {
+                          setTimeout(() => {
+                            window.location.reload();
+                          }, 1000);
+                        },
+                      });
                     } else if (res.data == 6) {
-                      message.success("已完成盘点任务");
+                      Modal.success({
+                        content: "已完成盘点任务",
+                        className: "list-custom-scan-success-modal",
+                      });
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 1000);
                     }
-                    setTimeout(() => {
-                      window.location.reload();
-                    }, 1000);
                   })
                   .catch((err) => {
-                    openNotification("接口错误参数", JSON.stringify(err));
+                    //openNotification("接口错误参数", JSON.stringify(err));
                     message.error(err.data.message);
                   });
               } else {
@@ -82,7 +125,18 @@ const List = (props) => {
       return message.error("未获取到正确地址");
     }
   };
-
+  const handleSuccess = (dataForm) => {
+    // 获取正确跳转地址
+    newScanEwm(dataForm)
+      .then((res) => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      })
+      .catch((err) => {
+        message.error(err.data.message);
+      });
+  };
   // 解析URL
   const getQueryObject = (url) => {
     url = url == null ? window.location.href : url;

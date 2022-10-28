@@ -5,14 +5,13 @@ const PreviewComponent = (props) => {
   const customConfig = {
     componentId: "111",
     data: "111",
-    formConfig: {
-    },
+    formConfig: {},
     component: {},
     configuration: '{"size":"large","placeholder":"33333","allowClear":true}',
   };
   return (
     <div>
-      <App {...customConfig} type="table" />
+      <App {...customConfig} type="list" />
       <br />
       <br />
       <div>回填值: {customConfig.data}</div>
