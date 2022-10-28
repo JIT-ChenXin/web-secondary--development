@@ -31,7 +31,7 @@ if (process.env.NODE_ENV !== "production") {
 // 是否是生产环境
 if (process.env.NODE_ENV !== "production") {
   const customConfig = {
-    variable: { default_value: "测试的数据", id: "测试的ID" },
+    variable: {default_value: "测试的数据", id: "测试的ID"},
     options: {
       auto: true,
       showToolbar: false,
@@ -51,7 +51,7 @@ if (process.env.NODE_ENV !== "production") {
           assetId: '825165b5-c0a4-46e3-a0c1-1c9de7fdb43b'
         }
       },
-      baseConfig: { id: "1" },
+      baseConfig: {id: "1"},
     },
     // type: "dataConfigration",
     data: [

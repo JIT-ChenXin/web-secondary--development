@@ -1,11 +1,11 @@
 {
-  "id": "fa991b35-d3ea-460d-a9bd-5a999f2ccf6b",
+  "id": "fa991b35-d3ea-460d-a9bd-5a989f2ccf6b",
   "type": "bigscreen",
-  "main": "main.1a1e5901.js",
+  "main": "main.30ac796a.js",
   "version": "2",
   "process": true,
   "props": {
-    "configration": [
+    "configuration": [
       "data"
     ],
     "img": "custom_table.png",
