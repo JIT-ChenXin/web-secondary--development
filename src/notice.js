@@ -105,147 +105,145 @@ class ApplicationNotice extends Component {
           dot={noticeData.length > 0}
           style={{ top: "2px", right: "4px" }}
         >
-          <BellOutlined style={{ margin: "0px 5px 0px 10px" }} onClick={() => { this.outLink() }}/>
+          <BellOutlined style={{ margin: "0px 5px 0px 10px" }} onClick={() => { this.outLink() }} />
         </Badge>
       </div>
     ) : (<Popover
-        trigger="hover"
-        overlayClassName="menuClass"
-        content={
-          <div
-            style={{
-              width: "280px",
-              padding: "0 20px",
-              color: "black",
-            }}
-          >
-            {noticeData.map((item, index) => {
-              const title = this.getInfoTitle(item.info_title);
-              return (
+      trigger="hover"
+      overlayClassName="menuClass"
+      content={
+        <div
+          style={{
+            width: "280px",
+            padding: "0 20px",
+            color: "black",
+          }}
+        >
+          {noticeData.map((item, index) => {
+            const title = this.getInfoTitle(item.info_title);
+            return (
+              <div
+                key={index}
+                className={"index-notify-hover"}
+                style={{
+                  height: "84px",
+                  borderBottom: "1px solid #ECECEC",
+                  cursor: "pointer",
+                }}
+              >
                 <div
-                  key={index}
-                  className={"index-notify-hover"}
                   style={{
-                    height: "84px",
-                    borderBottom: "1px solid #ECECEC",
-                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "20px 0 5px 0",
                   }}
                 >
+                  <Tooltip
+                    title={item.info_type === "4" ? item.info_content : title}
+                  >
+                    <span style={{ fontSize: "16px", fontWeight: "400" }}>
+                      {item.info_type !== "1"
+                        ? title.length > 6
+                          ? title.substring(0, 6) + "..."
+                          : title
+                        : ""}
+                    </span>
+                  </Tooltip>
+                  <span style={{ fontSize: "12px", color: "#999999" }}>
+                    {moment(item.last_modify_time).format("YYYY-MM-DD")}
+                  </span>
+                </div>
+                {item.info_type === "1" ? (
+                  <div>
+                    <Tooltip title={title}>
+                      {title.length > 14
+                        ? title.substring(0, 13) + "..."
+                        : title}
+                    </Tooltip>
+                    ，<a onClick={() => this.goAnalyzer(item)}>点击前往</a>
+                  </div>
+                ) : item.info_type === "2" ? (
+                  <div>
+                    <Tooltip title={item.info_content}>
+                      {item.info_content.length > 14
+                        ? item.info_content.substring(0, 13) + "..."
+                        : item.info_content}
+                    </Tooltip>
+                    ，
+                    <a
+                      onClick={() => this.externalConfirm(item, true)}
+                      style={{ marginRight: 8 }}
+                    >
+                      {/* {"同意"} */}
+                    </a>
+                    <a onClick={() => this.externalConfirm(item, false)}>
+                      {/* 拒绝 */}
+                    </a>
+                  </div>
+                ) : item.info_type === "3" ? (
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      padding: "20px 0 5px 0",
                     }}
                   >
-                    <Tooltip
-                      title={item.info_type === "4" ? item.info_content : title}
-                    >
-                      <span style={{ fontSize: "16px", fontWeight: "400" }}>
-                        {item.info_type !== "1"
-                          ? title.length > 6
-                            ? title.substring(0, 6) + "..."
-                            : title
-                          : ""}
-                      </span>
-                    </Tooltip>
-                    <span style={{ fontSize: "12px", color: "#999999" }}>
-                      {moment(item.last_modify_time).format("YYYY-MM-DD")}
-                    </span>
-                  </div>
-                  {item.info_type === "1" ? (
-                    <div>
-                      <Tooltip title={title}>
-                        {title.length > 14
-                          ? title.substring(0, 13) + "..."
-                          : title}
-                      </Tooltip>
-                      ，<a onClick={() => this.goAnalyzer(item)}>点击前往</a>
-                    </div>
-                  ) : item.info_type === "2" ? (
-                    <div>
-                      <Tooltip title={item.info_content}>
-                        {item.info_content.length > 14
-                          ? item.info_content.substring(0, 13) + "..."
-                          : item.info_content}
-                      </Tooltip>
-                      ，
-                      <a
-                        onClick={() => this.externalConfirm(item, true)}
-                        style={{ marginRight: 8 }}
+                    <Tooltip title={this.getDescContent(item)}>
+                      <div
+                        className={"text-ellipsis"}
+                        style={{ width: "210px", display: "inline-block" }}
                       >
-                        {/* {"同意"} */}
-                      </a>
-                      <a onClick={() => this.externalConfirm(item, false)}>
-                        {/* 拒绝 */}
-                      </a>
-                    </div>
-                  ) : item.info_type === "3" ? (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Tooltip title={this.getDescContent(item)}>
-                        <div
-                          className={"text-ellipsis"}
-                          style={{ width: "210px", display: "inline-block" }}
-                        >
-                          {this.getDescContent(item)}
-                        </div>
-                      </Tooltip>
-                      {item.info_status === "1" && (
-                        <a onClick={() => this.setItemRead(item)}>已读</a>
-                      )}
-                    </div>
-                  ) : item.info_type === "4" ? (
-                    <div>
-                      <Tooltip title={item.info_content}>
-                        {item.info_content.length > 14
-                          ? item.info_content.substring(0, 13) + "..."
-                          : item.info_content}
-                      </Tooltip>
-                      ，<a onClick={() => this.goAnalyzer(item)}>点击前往</a>
-                    </div>
-                  ) : null}
-                </div>
+                        {this.getDescContent(item)}
+                      </div>
+                    </Tooltip>
+                    {item.info_status === "1" && (
+                      <a onClick={() => this.setItemRead(item)}>已读</a>
+                    )}
+                  </div>
+                ) : item.info_type === "4" ? (
+                  <div>
+                    <Tooltip title={item.info_content}>
+                      {item.info_content.length > 14
+                        ? item.info_content.substring(0, 13) + "..."
+                        : item.info_content}
+                    </Tooltip>
+                    ，<a onClick={() => this.goAnalyzer(item)}>点击前往</a>
+                  </div>
+                ) : null}
+              </div>
+            );
+          })}
+          <div
+            style={{
+              textAlign: "center",
+              height: "45px",
+              lineHeight: "45px",
+              cursor: "pointer",
+            }}
+            onClick={() => {
+              hashHistory.push(
+                `/applicationview/content/notice?appid=${qs.parse(location.search).appid
+                }&type=view&menuId=${qs.parse(location.search).menuId}${qs.parse(location.search).pId
+                  ? "&pId=" + qs.parse(location.search).pId
+                  : ""
+                }`
               );
-            })}
-            <div
-              style={{
-                textAlign: "center",
-                height: "45px",
-                lineHeight: "45px",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                hashHistory.push(
-                  `/applicationview/content/notice?appid=${
-                    qs.parse(location.search).appid
-                  }&type=view&menuId=${qs.parse(location.search).menuId}${
-                    qs.parse(location.search).pId
-                      ? "&pId=" + qs.parse(location.search).pId
-                      : ""
-                  }`
-                );
-                window.location.reload();
-              }}
-            >
-              查看全部通知
-            </div>
-          </div>
-        }
-      >
-        <div className="header-notice">
-          <Badge
-            dot={noticeData.length > 0}
-            style={{ top: "2px", right: "4px" }}
+              window.location.reload();
+            }}
           >
-            <BellOutlined style={{ margin: "0px 5px 0px 10px" }} />
-          </Badge>
+            查看全部通知
+          </div>
         </div>
-      </Popover>)
+      }
+    >
+      <div className="header-notice">
+        <Badge
+          dot={noticeData.length > 0}
+          style={{ top: "2px", right: "4px" }}
+        >
+          <BellOutlined style={{ margin: "0px 5px 0px 10px" }} />
+        </Badge>
+      </div>
+    </Popover>)
     );
   }
 }

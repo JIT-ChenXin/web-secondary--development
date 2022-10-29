@@ -327,14 +327,18 @@ export default class App extends Component {
     // }
     let params = []
     let url = item.url
-    if (item.params.length > 0) {
+
+
+    if (item.params?.length > 0) {
       item.params.forEach(x => {
         let item = x.key + '=' + x.value
         params.push(item)
       })
       params = params.join('&')
       url = url + '?' + params
+
     }
+
 
     if (index > 0) {
       this.setState({ selectButton: item.name }, () => window.open(url));

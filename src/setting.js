@@ -75,7 +75,7 @@ const Setting = (props) => {
     let temp = [...buttons];
     temp[pos].name = e.target.value;
     config.buttons = temp;
-
+    setCustomConfig(config);
     onConfigChange && onConfigChange(config);
   };
   // 参数添加
@@ -105,6 +105,7 @@ const Setting = (props) => {
     onConfigChange && onConfigChange(config);
   }
   const changeBtnNameParam = (e, i, childI) => {
+
     let buttons = JSON.parse(JSON.stringify(buttonsP))
     buttons[i].params[childI].key = e.target.value
     setButtonP(buttons)

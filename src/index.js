@@ -18,9 +18,9 @@ if (process.env.NODE_ENV !== "production") {
     title: "数据构建",
     logoUrl: null,
     msgLink: "https://www.baidu.com",
-    mainHeight: null, buttons: [{ name: 'ddd', url: '455454545', params: [{ key: '111', value: '1234567890' }] }]
+    mainHeight: null, buttons: [{ name: 'ddd', url: '455454545', }]
   };
-  let isConfig = '';
+  let isConfig = 'dd';
   ReactDOM.render(<App customConfig={customConfig} isConfig={isConfig} />, document.getElementById("root"));
 } else {
   if (!window.CUSTOM_PLUGIN) {
