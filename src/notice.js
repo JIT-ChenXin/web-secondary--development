@@ -90,10 +90,25 @@ class ApplicationNotice extends Component {
     return `导出文件完成「${showName}」导出文件已完成。文件下载链接将于24小时后失效，请尽快下载
     )}`;
   };
+  outLink = () => {
+    const { msgLink } = this.props || '';
+    if (msgLink) {
+      window.open(msgLink)
+    }
+  }
   render() {
     const { noticeData } = this.state;
-    return (
-      <Popover
+    const { msgLink } = this.props || "";
+    return (msgLink ? (
+      <div className="header-notice">
+        <Badge
+          dot={noticeData.length > 0}
+          style={{ top: "2px", right: "4px" }}
+        >
+          <BellOutlined style={{ margin: "0px 5px 0px 10px" }} onClick={() => { this.outLink() }}/>
+        </Badge>
+      </div>
+    ) : (<Popover
         trigger="hover"
         overlayClassName="menuClass"
         content={
@@ -230,7 +245,7 @@ class ApplicationNotice extends Component {
             <BellOutlined style={{ margin: "0px 5px 0px 10px" }} />
           </Badge>
         </div>
-      </Popover>
+      </Popover>)
     );
   }
 }

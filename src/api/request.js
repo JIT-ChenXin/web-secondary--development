@@ -3,9 +3,9 @@ import qs from "querystringify";
 
 if (process.env.NODE_ENV === "development") {
   document.cookie =
-    "token=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY2NTk5Mzc3MDAyNSwidXNlcklkIjoiMTIzNDU2Nzg5MCJ9.Zlk-TXWLTsqINA_n-fbHidQ94TS2O_V1epT_zhNrnU4";
+    "token=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY2Njc1MzI0OTU3NywidXNlcklkIjoiMTIzNDU2Nzg5MCJ9.hy6sVc5koMLlu4y26HiY2xYP6FmMXQq6GqVQ5eklemk";
   document.cookie =
-    "refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY2NTk5Mzc3MDAyNn0.8neXPTVPtNdP4Qx8nvilgzrl4ZZ67uGBQkLcTMmzw2k";
+    "refreshToken=eyJhbGciOiJIUzI1NiJ9.eyJsb2dpblRpbWVzdGFtcCI6MTY2Njc1MzI0OTU3OH0.5L5C_Q0HrjV8poBOw2gnzkppGYbLAFeqUbWWC6k-lZo";
   document.cookie = "username=admin";
   document.cookie = "windowOnline=true";
   document.cookie = "JSESSIONID=D2012FF85B626ADD2958913BC2F5CD92";

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Input, Layout, Menu, Anchor, message, Dropdown } from "antd";
+import { Button, Input, Layout, Menu, Anchor, message, Dropdown, Badge } from "antd";
 import Setting from "./setting";
 // import classNames from "classnames";
 import qs from "querystringify";
@@ -363,6 +363,7 @@ export default class App extends Component {
       // 工作台地址
       // workbenchUrl = "",
       buttons = [],
+      msgLink = ""
     } = customConfig || {};
 
     const { selectButton } = this.state;
@@ -407,7 +408,7 @@ export default class App extends Component {
               onSearch={this.onSearch}
               style={{ borderRadius: "15px 0px 0px 15px", color: "#ffffff" }}
             />
-            <ApplicationNotice styleStore={{}}>
+            <ApplicationNotice msgLink={msgLink} styleStore={{}}>
               <BellOutlined
                 className="BellOutlined"
                 style={{
