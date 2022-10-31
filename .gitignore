@@ -16,9 +16,9 @@ pluginTemp/js/*
 **/pluginTemp/js/*.js
 pluginTemp/libs/*
 plugin-*.zip
-
-
 .history
+temp
+
 # Editor directories and files
 .umi
 .idea
@@ -28,3 +28,4 @@ plugin-*.zip
 *.njsproj
 *.sln
 *.sw?
+
