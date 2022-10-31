@@ -1,0 +1,23 @@
+{
+  "id": "9c673d11-5a25-4e3f-a4cb-8aaeda472bd2",
+  "type": "app",
+  "main": "app.0c5c8bfa.js",
+  "version": "2",
+  "props": {
+    "type": "customize",
+    "img": "APP_0001.png",
+    "name": "应用二开_vue",
+    "loadStyle": 0,
+    "lib": [],
+    "css_script": [],
+    "customconf": [
+      "id",
+      "dirAssetId",
+      "directoryLable",
+      "enclosureAssetId",
+      "enclosureName",
+      "enclosureDate",
+      "enclosureId"
+    ]
+  }
+}
