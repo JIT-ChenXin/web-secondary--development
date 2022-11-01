@@ -473,7 +473,7 @@ const App = props => {
           <img style={{ width: 50, height: 50 }} alt="" src={logo} />
         </div>
       ) : (
-        <div className="logo" style={{ width: 255 }}>
+        <div className="logo" style={{ width: 256 }}>
           <img style={{ width: 50, height: 50 }} alt="" src={logo} />
           <span className="title">分布式光伏服务平台</span>
         </div>
